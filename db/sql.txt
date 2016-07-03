@@ -1,0 +1,16 @@
+create database flights;
+use flights;
+
+SET FOREIGN_KEY_CHECKS = 0;
+
+DROP TABLE IF EXISTS  `account`;
+CREATE TABLE `account` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50),
+  `email` varchar(50) NOT NULL,
+  `psd` varchar(50) NOT NULL,
+  `createtime` varchar(20) DEFAULT NULL,
+  `type` int(1),
+  `status` int(1),
+  PRIMARY KEY (`id`)
+)  DEFAULT CHARSET=utf8;
