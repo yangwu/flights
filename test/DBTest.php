@@ -2,8 +2,10 @@
 include_once dirname ( '__FILE__' ) . './db/DBHelper.php';
 include_once dirname ( '__FILE__' ) . './model/Account.php';
 include_once dirname ( '__FILE__' ) . './model/User.php';
+include_once dirname ( '__FILE__' ) . './model/Line.php';
 include_once dirname ( '__FILE__' ) . './business/BAccount.php';
 include_once dirname ( '__FILE__' ) . './business/BUser.php';
+include_once dirname ( '__FILE__' ) . './business/BLine.php';
 
 header ( "Content-Type: text/html;charset=utf-8" );
 
@@ -76,4 +78,26 @@ if($insertUserid){
 	echo "<br/>insert userid:".$insertUserid;
 }else{
 	echo "<br/>insert failed";	
+}
+
+
+$bline = new BLine();
+$line1 = new Line();
+$line1->name = 'line1';
+$line1->accountid = '10';
+
+$insertLineid = $bline->addLine($line1);
+if($insertLineid){
+	echo "<br/>insert lineid:".$insertLineid;
+}else{
+	echo "<br/>insert failed";
+}
+
+$line1->accountid = "6";
+$line1->id = $insertLineid;
+$update = $bline->updatelineAccountid($line1);
+if($update){
+	echo "<br/>update lineid:".$update;
+}else{
+	echo "<br/>update failed";
 }

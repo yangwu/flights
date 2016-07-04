@@ -27,3 +27,12 @@ CREATE TABLE `user`(
   `businesslicenseurl` varchar(500),
   PRIMARY KEY(`id`)
 ) DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `line`;
+CREATE TABLE `line`(
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `accountid` int(11) NOT NULL,
+  `name` varchar(50),
+  `createtime` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) DEFAULT CHARSET=utf8;
