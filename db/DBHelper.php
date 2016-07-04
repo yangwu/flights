@@ -27,7 +27,7 @@ class DBHelper {
 		echo "<br/>insertsql:".$insertsql;
 		$result = mysql_query($insertsql);
 		echo "<br/>insert result:".$result;
-		return $result;
+		return mysql_insert_id ();
 	}
 	
 	public function checkAccount($account) {
@@ -35,5 +35,14 @@ class DBHelper {
 		echo "<br/>check sql:".$querySql;
 		$result = mysql_query($querySql);
 		return $result;
+	}
+	
+	public function addUser($user){
+		$insertuser = 'INSERT INTO user (accountid,realname,address,qq,tel,businesslicenseurl) '
+				. 'VALUES(' . $user->accountid . ',"' . $user->realname . '","' . $user->address . '","' . $user->qq . '",' . $user->tel . ',"' . $user->businesslicenseurl . '")';
+		echo "<br/>insertsql:".$insertuser;
+		$result = mysql_query($insertuser);
+		echo "<br/>insert result:".$result;
+		return mysql_insert_id();
 	}
 }

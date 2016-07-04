@@ -14,3 +14,16 @@ CREATE TABLE `account` (
   `status` int(1),
   PRIMARY KEY (`id`)
 )  DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE `user`(
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `accountid` int(11) NOT NULL,
+  `realname` varchar(100),
+  `address`  varchar(1000),
+  `tel`  varchar(50),
+  `qq` varchar(20),
+  `businesslicenseurl` varchar(500),
+  PRIMARY KEY(`id`)
+) DEFAULT CHARSET=utf8;

@@ -1,7 +1,11 @@
 <?php
 include_once dirname ( '__FILE__' ) . './db/DBHelper.php';
 include_once dirname ( '__FILE__' ) . './model/Account.php';
+include_once dirname ( '__FILE__' ) . './model/User.php';
 include_once dirname ( '__FILE__' ) . './business/BAccount.php';
+include_once dirname ( '__FILE__' ) . './business/BUser.php';
+
+header ( "Content-Type: text/html;charset=utf-8" );
 
 $dbhelper = new DBHelper ();
 echo "*************DBTEST************";
@@ -43,11 +47,33 @@ if($baccount->isAccountExisted($account1)){
 }
 
 $account3 = $account1;
-$account3->name = 'newname';
-$account3->email = 'newemail';
+$account3->name = 'newname3';
+$account3->email = 'newemail3';
 
 if($baccount->isAccountExisted($account3)){
 	echo "<br/>check account3 existed";
 }else{
 	echo "<br/>check account3 no existed";
+}
+
+$result = $baccount->addAccount($account3);
+if($result){
+	echo "<br/>add account 3 success";
+}else{
+	echo "<br/>add account 3 failed";
+}
+
+$buser = new BUser();
+$user1 = new User();
+$user1->accountid = $result;
+$user1->address = 'testaddress';
+$user1->businesslicenseurl = '/image/12dj.jpg';
+$user1->qq = '4324381732';
+$user1->tel = '0872-843627418';
+$user1->realname = 'testuser';
+$insertUserid = $buser->addUser($user1);
+if($insertUserid){
+	echo "<br/>insert userid:".$insertUserid;
+}else{
+	echo "<br/>insert failed";	
 }
