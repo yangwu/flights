@@ -3,9 +3,11 @@ include_once dirname ( '__FILE__' ) . './db/DBHelper.php';
 include_once dirname ( '__FILE__' ) . './model/Account.php';
 include_once dirname ( '__FILE__' ) . './model/User.php';
 include_once dirname ( '__FILE__' ) . './model/Line.php';
+include_once dirname ( '__FILE__' ) . './model/Product.php';
 include_once dirname ( '__FILE__' ) . './business/BAccount.php';
 include_once dirname ( '__FILE__' ) . './business/BUser.php';
 include_once dirname ( '__FILE__' ) . './business/BLine.php';
+include_once dirname ( '__FILE__' ) . './business/BProduct.php';
 
 header ( "Content-Type: text/html;charset=utf-8" );
 
@@ -13,11 +15,11 @@ $dbhelper = new DBHelper ();
 echo "*************DBTEST************";
 
 $account1 = new Account();
-$account1->name = "test name";
+$account1->name = "test'jdaasafdsssfdsafs;\"  or 1=\"1\"";
 echo "<br/>account:".$account1->name;
 
 $account1->psd = md5('123');
-$account1->email = 'test1@g.cn';
+$account1->email = 'taddfd\",k--sd1@g.cn';
 $account1->status = 1;
 $account1->type = 2;
 
@@ -101,3 +103,17 @@ if($update){
 }else{
 	echo "<br/>update failed";
 }
+
+$bproduct = new BProduct();
+$product = new Product();
+
+$product->lineid = "1";
+$product->title = "ptitle";
+$product->description = "pfdsfwefdsafcdescrption";
+$product->price = '123';
+$product->childprice = '12';
+$product->photourl = 'fdsa/fdsjkl.jpg';
+$product->promotephotourl = 'fdsa/fdsjkl.jpg';
+
+$insertp = $bproduct->addProduct($product);
+echo "<br/>result:".$insertp;

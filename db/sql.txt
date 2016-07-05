@@ -36,3 +36,18 @@ CREATE TABLE `line`(
   `createtime` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `product`;
+CREATE TABLE `product`(
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `lineid` int(11) NOT NULL,
+  `title` varchar(1000),
+  `price` varchar(10),
+  `childprice` varchar(10),
+  `description` varchar(5000),
+  `photourl` varchar(500),
+  `promotephotourl` varchar(500),
+  `createtime` varchar(20) DEFAULT NULL,
+  PRIMARY KEY(`id`)
+) DEFAULT CHARSET=utf8;
