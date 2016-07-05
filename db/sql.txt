@@ -60,3 +60,18 @@ CREATE TABLE `productdate`(
   `total` int(5),
   PRIMARY KEY(`productid`,`productdate`)
 ) DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `purchaseinfo`;
+CREATE TABLE `purchaseinfo`(
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `productid` int(11) NOT NULL,
+  `productdate` varchar(20) NOT NULL,
+  `realname` varchar(100),
+  `birthday` varchar(20),
+  `isadult` int(1),
+  `accountid` int(11) NOT NULL,
+  `cardtype` int(1),
+  `cardnumber` varchar(50),
+  `cardvalidate` varchar(20),
+  PRIMARY KEY(`id`)
+) DEFAULT CHARSET=utf8;

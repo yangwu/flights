@@ -5,10 +5,12 @@ include_once dirname ( '__FILE__' ) . './model/User.php';
 include_once dirname ( '__FILE__' ) . './model/Line.php';
 include_once dirname ( '__FILE__' ) . './model/Product.php';
 include_once dirname ( '__FILE__' ) . './model/ProductDate.php';
+include_once dirname ( '__FILE__' ) . './model/PurchaseInfo.php';
 include_once dirname ( '__FILE__' ) . './business/BAccount.php';
 include_once dirname ( '__FILE__' ) . './business/BUser.php';
 include_once dirname ( '__FILE__' ) . './business/BLine.php';
 include_once dirname ( '__FILE__' ) . './business/BProduct.php';
+include_once dirname ( '__FILE__' ) . './business/BPurchaseInfo.php';
 
 header ( "Content-Type: text/html;charset=utf-8" );
 
@@ -126,3 +128,18 @@ $productdate->inventory = 100;
 $productdate->total = 100;
 $insertpd = $bproduct->addProductDate($productdate);
 echo "<br/>insertpd:".$insertpd;
+
+$bpurchase = new BPurchaseInfo();
+$purchase = new PurchaseInfo();
+$purchase->accountid = "1";
+$purchase->productid = "1";
+$purchase->productdate = date('Ymd');
+$purchase->realname = "ceshi";
+$purchase->birthday = '19880812';
+$purchase->cardtype = "1";
+$purchase->cardnumber = "1321jfda23fdsa";
+$purchase->cardvalidate = '';
+$purchase->isadult = "1";
+$insertpi = $bpurchase->addPurchaseInfo($purchase);
+echo "<br/>insertpi:".$insertpi;
+

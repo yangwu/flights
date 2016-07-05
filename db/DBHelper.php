@@ -66,4 +66,11 @@ class DBHelper {
 		echo "<br/>insertproductdate:" . $insertproductdate;
 		return mysql_query ( $insertproductdate );
 	}
+	public function addPurchaseInfo($purchaseInfo) {
+		$insertpurchaseinfo = 'INSERT INTO purchaseinfo (productid,realname,birthday,isadult,productdate,cardtype,cardnumber,cardvalidate,accountid) ' . 'VALUES(' . $purchaseInfo->productid . ',"' . mysql_real_escape_string ( $purchaseInfo->realname ) . '","' . $purchaseInfo->birthday . '",' . $purchaseInfo->isadult . ',"' . $purchaseInfo->productdate . '",' . $purchaseInfo->cardtype . ',"' . mysql_real_escape_string ( $purchaseInfo->cardnumber ) . '","' . $purchaseInfo->cardvalidate . '",' . $purchaseInfo->accountid . ')';
+		echo "<br/>insertpurchaseinfo:" . $insertpurchaseinfo;
+		$result = mysql_query ( $insertpurchaseinfo );
+		echo "<br/>insert purchaseinfo result:" . $result;
+		return mysql_insert_id ();
+	}
 }
