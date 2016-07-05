@@ -4,6 +4,7 @@ include_once dirname ( '__FILE__' ) . './model/Account.php';
 include_once dirname ( '__FILE__' ) . './model/User.php';
 include_once dirname ( '__FILE__' ) . './model/Line.php';
 include_once dirname ( '__FILE__' ) . './model/Product.php';
+include_once dirname ( '__FILE__' ) . './model/ProductDate.php';
 include_once dirname ( '__FILE__' ) . './business/BAccount.php';
 include_once dirname ( '__FILE__' ) . './business/BUser.php';
 include_once dirname ( '__FILE__' ) . './business/BLine.php';
@@ -117,3 +118,11 @@ $product->promotephotourl = 'fdsa/fdsjkl.jpg';
 
 $insertp = $bproduct->addProduct($product);
 echo "<br/>result:".$insertp;
+
+$productdate = new ProductDate();
+$productdate->productid = $insertp;
+$productdate->productdate = date('Ymd');
+$productdate->inventory = 100;
+$productdate->total = 100;
+$insertpd = $bproduct->addProductDate($productdate);
+echo "<br/>insertpd:".$insertpd;

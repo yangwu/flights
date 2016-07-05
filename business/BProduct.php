@@ -8,4 +8,10 @@ class BProduct {
 	public function addProduct($product) {
 		return $this->dbhelper->addProduct ( $product );
 	}
+	public function addProductDate($productdate) {
+		$result = $this->dbhelper->addProductDate ( $productdate );
+		if ($result)
+			return true;
+		return false;
+	}
 }

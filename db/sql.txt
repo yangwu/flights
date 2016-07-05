@@ -51,3 +51,12 @@ CREATE TABLE `product`(
   `createtime` varchar(20) DEFAULT NULL,
   PRIMARY KEY(`id`)
 ) DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `productdate`;
+CREATE TABLE `productdate`(
+  `productid` int(11) NOT NULL,
+  `productdate` varchar(20) NOT NULL,
+  `inventory` int(5),
+  `total` int(5),
+  PRIMARY KEY(`productid`,`productdate`)
+) DEFAULT CHARSET=utf8;

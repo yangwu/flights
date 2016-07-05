@@ -55,11 +55,15 @@ class DBHelper {
 		return $result;
 	}
 	public function addProduct($product) {
-		$insertproduct = 'INSERT INTO product (lineid,title,description,price,childprice,photourl,promotephotourl,createtime) ' 
-				. 'VALUES(' . $product->lineid . ',"' . mysql_real_escape_string ( $product->title ) . '","' . mysql_real_escape_string ( $product->description ) . '","' . $product->price . '","' . $product->childprice . '","' . $product->photourl . '","' . $product->promotephotourl . '","' . date ( 'Ymd' ) . '")';
+		$insertproduct = 'INSERT INTO product (lineid,title,description,price,childprice,photourl,promotephotourl,createtime) ' . 'VALUES(' . $product->lineid . ',"' . mysql_real_escape_string ( $product->title ) . '","' . mysql_real_escape_string ( $product->description ) . '","' . $product->price . '","' . $product->childprice . '","' . $product->photourl . '","' . $product->promotephotourl . '","' . date ( 'Ymd' ) . '")';
 		echo "<br/>insertproduct:" . $insertproduct;
 		$result = mysql_query ( $insertproduct );
 		echo "<br/>insert product result:" . $result;
 		return mysql_insert_id ();
+	}
+	public function addProductDate($productdate) {
+		$insertproductdate = 'INSERT INTO productdate (productid,productdate,inventory,total) ' . 'VALUES(' . $productdate->productid . ',"' . $productdate->productdate . '",' . $productdate->inventory . ',' . $productdate->total . ')';
+		echo "<br/>insertproductdate:" . $insertproductdate;
+		return mysql_query ( $insertproductdate );
 	}
 }
