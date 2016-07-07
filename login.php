@@ -1,17 +1,24 @@
 <?php 
 include_once dirname ( '__FILE__' ) . '/config.php';
-session_start ();
-$type=$_GET['type'];
-if(strcmp($type,"exit") == 0){
-	$_SESSION['username'] = null;
+include_once dirname ( '__FILE__' ) . '/./business/BAccount.php';
+include_once dirname ( '__FILE__' ) . '/./model/Account.php';
+$type = $_POST['type'];
+if(strcmp($type,"login") == 0 ){
+	$username = $_POST['username'];
+	$psd = $_POST['password'];
+	$baccount = new BAccount();
+	$account = $baccount->getAccount($username, md5($psd));
+	if($account != null){
+		echo "<br/>login success";
+		if(strcmp($account->type,FRONTSTORE) == 0 && strcmp($account->status,PENDING) == 0 ){
+			echo "<br/> your account is still pending";
+		}else {
+			echo "<br/> go to index";
+		}
+	}else{
+		echo "<br/>login failed";
+	}
 }
-$username = $_SESSION ['username'];
-session_commit();
-if($username != null){
-	header("Location:./wuploadproduct.php");
-	exit;
-}
-$errorMsg = $_GET ['errorMsg'];
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -52,7 +59,8 @@ $errorMsg = $_GET ['errorMsg'];
 	<!-- END HEADER -->
 	<!-- SUB HEADER NAV-->
 	<!-- splash page subheader-->
-	<form id="loginform" method="post" action="wuploadproduct.php">
+	<form id="loginform" method="post" action="login.php">
+		<input type="hidden" name="type" id="type" value = "login"/>
 		<div id="page-content" class="container-fluid  ">
 
 			<div id="login-page-content" class="center">

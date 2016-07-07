@@ -33,6 +33,17 @@ class DBHelper {
 		$result = mysql_query ( $querySql );
 		return $result;
 	}
+	public function getAccount($username,$psd){
+		$loginSql = 'select * from account where psd = "' . $psd . '" and ';
+		if (stripos ( $username, "@" ) != false) {
+			$loginSql = $loginSql . ' email = "' . mysql_real_escape_string($username) . '"';
+		} else {
+			$loginSql = $loginSql . ' name = "' . mysql_real_escape_string($username) . '"';
+		}
+		echo "<br/>loginSql:".$loginSql;
+		return mysql_query($loginSql);
+	}
+	
 	public function addUser($user) {
 		$insertuser = 'INSERT INTO user (accountid,realname,address,qq,tel,businesslicenseurl) ' . 'VALUES(' . $user->accountid . ',"' . mysql_real_escape_string ( $user->realname ) . '","' . mysql_real_escape_string ( $user->address ) . '","' . $user->qq . '","' . $user->tel . '","' . $user->businesslicenseurl . '")';
 		echo "<br/>insertsql:" . $insertuser;
