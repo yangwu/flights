@@ -34,7 +34,7 @@ class DBHelper {
 		return $result;
 	}
 	public function addUser($user) {
-		$insertuser = 'INSERT INTO user (accountid,realname,address,qq,tel,businesslicenseurl) ' . 'VALUES(' . $user->accountid . ',"' . mysql_real_escape_string ( $user->realname ) . '","' . mysql_real_escape_string ( $user->address ) . '","' . $user->qq . '",' . $user->tel . ',"' . $user->businesslicenseurl . '")';
+		$insertuser = 'INSERT INTO user (accountid,realname,address,qq,tel,businesslicenseurl) ' . 'VALUES(' . $user->accountid . ',"' . mysql_real_escape_string ( $user->realname ) . '","' . mysql_real_escape_string ( $user->address ) . '","' . $user->qq . '","' . $user->tel . '","' . $user->businesslicenseurl . '")';
 		echo "<br/>insertsql:" . $insertuser;
 		$result = mysql_query ( $insertuser );
 		echo "<br/>insert result:" . $result;

@@ -1,5 +1,5 @@
 <?php
-include_once dirname ( '__FILE__' ) . './db/DBHelper.php';
+include_once dirname ( '__FILE__' ) . '/./db/DBHelper.php';
 class BUser{
 	private $dbhelper;
 	public function __construct() {
