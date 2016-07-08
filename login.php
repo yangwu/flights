@@ -10,10 +10,14 @@ if(strcmp($type,"login") == 0 ){
 	$account = $baccount->getAccount($username, md5($psd));
 	if($account != null){
 		echo "<br/>login success";
-		if(strcmp($account->type,FRONTSTORE) == 0 && strcmp($account->status,PENDING) == 0 ){
+		if(strcmp($account->type,TYPE_FRONTSTORE) == 0 && strcmp($account->status,STATUS_PENDING) == 0 ){
 			echo "<br/> your account is still pending";
 		}else {
 			echo "<br/> go to index";
+			session_start ();
+			$_SESSION ['username'] = $account->name;
+			$_SESSION['type'] = $account->type;
+			session_commit();
 		}
 	}else{
 		echo "<br/>login failed";

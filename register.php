@@ -23,8 +23,8 @@ if(strcmp ( $type, "register" ) == 0){
 	$account->psd = md5($password);
 	$account->createtime = date('Ymd');
 	
-	$account->status = PENDING;
-	$account->type = FRONTSTORE;
+	$account->status = STATUS_PENDING;
+	$account->type = TYPE_FRONTSTORE;
 	
 	$baccount = new BAccount();
 	$newaccountid = $baccount->addAccount($account);
