@@ -1,10 +1,14 @@
 <?php
 include_once dirname ( '__FILE__' ) . '/config.php';
+include_once dirname ( '__FILE__' ) . '/./business/BLine.php';
 header ( "Content-Type: text/html;charset=utf-8" );
 session_start ();
 $username =$_SESSION ['username'];
 $type = $_SESSION['type'];
 session_commit();
+
+$bline = new BLine();
+$lines = $bline->getAllLines();
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -36,9 +40,17 @@ session_commit();
         <div class="col-md-3">
             <h2>Line list</h2>
             <ul class="nav nav-tabs nav-stacked">
-        <li class="active"><a href='#'>Another Link 1</a></li>
-        <li><a href='#'>Another Link 2</a></li>
-        <li><a href='#'>Another Link 3</a></li>
+            <?php
+            
+            foreach ($lines as $templine){
+            	$isactive = $templine->isactive;
+            	if(strcmp($isactive,LINE_ACTIVE) == 0){
+            		echo "<li class=\"active\"><a href='#'>".$templine->name."</a></li>";
+            	}else{
+            		echo "<li><a href='#'>".$templine->name."</a></li>";
+            	}
+            }
+            ?>
     </ul>
         </div>
         <div class="col-md-9">

@@ -65,6 +65,11 @@ class DBHelper {
 		echo "update result:" . $result;
 		return $result;
 	}
+	
+	public function getAllLines(){
+		$sql = 'SELECT * FROM line order by createtime,id';
+		return mysql_query($sql);
+	}
 	public function addProduct($product) {
 		$insertproduct = 'INSERT INTO product (lineid,title,description,price,childprice,photourl,promotephotourl,createtime) ' . 'VALUES(' . $product->lineid . ',"' . mysql_real_escape_string ( $product->title ) . '","' . mysql_real_escape_string ( $product->description ) . '","' . $product->price . '","' . $product->childprice . '","' . $product->photourl . '","' . $product->promotephotourl . '","' . date ( 'Ymd' ) . '")';
 		echo "<br/>insertproduct:" . $insertproduct;

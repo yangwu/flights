@@ -1,6 +1,6 @@
 <?php
 class Line {
-	private $id, $accountid, $name, $createtime;
+	public $id, $accountid, $name, $createtime,$isactive;
 	function __get($property_name) {
 		if (isset ( $this->$property_name )) {
 			return $this->$property_name;
