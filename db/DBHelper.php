@@ -13,7 +13,6 @@ class DBHelper {
 		} else {
 			mysql_select_db ( $dbname );
 			mysql_query ( "set names 'UTF8'" );
-			echo "connection successful";
 		}
 	}
 	function __destruct() {
@@ -76,6 +75,11 @@ class DBHelper {
 		$result = mysql_query ( $insertproduct );
 		echo "<br/>insert product result:" . $result;
 		return mysql_insert_id ();
+	}
+	
+	public function getLineProducts($lineid){
+		$lineproductsql = 'select * from product where lineid = '.$lineid;
+		return mysql_query($lineproductsql);
 	}
 	public function addProductDate($productdate) {
 		$insertproductdate = 'INSERT INTO productdate (productid,productdate,inventory,total) ' . 'VALUES(' . $productdate->productid . ',"' . $productdate->productdate . '",' . $productdate->inventory . ',' . $productdate->total . ')';

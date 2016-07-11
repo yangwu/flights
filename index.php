@@ -1,6 +1,7 @@
 <?php
 include_once dirname ( '__FILE__' ) . '/config.php';
 include_once dirname ( '__FILE__' ) . '/./business/BLine.php';
+include_once dirname ( '__FILE__' ) . '/./business/BProduct.php';
 header ( "Content-Type: text/html;charset=utf-8" );
 session_start ();
 $username =$_SESSION ['username'];
@@ -9,6 +10,14 @@ session_commit();
 
 $bline = new BLine();
 $lines = $bline->getAllLines();
+if(count($lines)>0){
+	$activelineid = $lines[0]->id;	
+}
+
+$bproduct = new BProduct();
+if(isset($activelineid)){
+	$products = $bproduct->getLinePrducts($activelineid);
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -54,7 +63,14 @@ $lines = $bline->getAllLines();
     </ul>
         </div>
         <div class="col-md-9">
-            <h2>Line Content</h2>  
+        	<h2>Product list</h2>
+        	<ul class="nav nav-tabs nav-stacked">
+            <?php 
+            if(count($products)>0)
+	            foreach ($products as $product){
+	            	echo "<li><a href='#'>".$product->title."</a></li>";
+	            }
+            ?> 
         </div>
 
 	<!-- FOOTER -->

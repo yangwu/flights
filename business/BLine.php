@@ -24,16 +24,10 @@ class BLine {
 	public function getAllLines(){
 		$result = $this->dbhelper->getAllLines();
 		$lines = array();
-		$isactive = LINE_INACTIVE;// current active line;
 		while($temp = mysql_fetch_array($result)){
 			$line = new Line();
-			if(strcmp($isactive,LINE_ACTIVE) != 0){
-				$isactive = LINE_ACTIVE;
-				$line->isactive = $isactive;
-			}else{
-				$line->isactive = LINE_INACTIVE;
-			}
 			$line->name = $temp['name'];
+			$line->id = $temp['id'];
 			$lines[] = $line;
 		}
 		return $lines;
