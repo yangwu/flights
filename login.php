@@ -2,8 +2,25 @@
 include_once dirname ( '__FILE__' ) . '/config.php';
 include_once dirname ( '__FILE__' ) . '/./business/BAccount.php';
 include_once dirname ( '__FILE__' ) . '/./model/Account.php';
-$type = $_POST['type'];
-if(strcmp($type,"login") == 0 ){
+header ( "Content-Type: text/html;charset=utf-8" );
+
+session_start ();
+$logincommand = $_POST['type'];
+$command=$_GET['command'];
+if(strcmp($command,"exit") == 0){
+	$_SESSION['username'] = null;
+}
+
+$username =$_SESSION ['username'];
+$type = $_SESSION['type'];
+session_commit();
+
+if ($username != null) { // 登录
+	header ( "Location:./index.php" );
+	exit ();
+}
+
+if(strcmp($logincommand,"login") == 0 ){
 	$username = $_POST['username'];
 	$psd = $_POST['password'];
 	$baccount = new BAccount();
@@ -12,15 +29,19 @@ if(strcmp($type,"login") == 0 ){
 		echo "<br/>login success";
 		if(strcmp($account->type,TYPE_FRONTSTORE) == 0 && strcmp($account->status,STATUS_PENDING) == 0 ){
 			echo "<br/> your account is still pending";
+			$errorMsg = "您的账户还在审核中，请等待管理员审核完毕后再继续使用。";
 		}else {
 			echo "<br/> go to index";
 			session_start ();
 			$_SESSION ['username'] = $account->name;
 			$_SESSION['type'] = $account->type;
 			session_commit();
+			header ( "Location:./index.php" );
+			exit ();
 		}
 	}else{
 		echo "<br/>login failed";
+		$errorMsg = "登录失败，用户名或密码错误.";
 	}
 }
 ?>
@@ -64,7 +85,7 @@ if(strcmp($type,"login") == 0 ){
 	<!-- SUB HEADER NAV-->
 	<!-- splash page subheader-->
 	<form id="loginform" method="post" action="login.php">
-		<input type="hidden" name="type" id="type" value = "login"/>
+		<input type="hidden" name="logincommand" id="logincommand" value = "login"/>
 		<div id="page-content" class="container-fluid  ">
 
 			<div id="login-page-content" class="center">

@@ -8,6 +8,11 @@ $username =$_SESSION ['username'];
 $type = $_SESSION['type'];
 session_commit();
 
+if ($username == null) { // 未登录
+	header ( "Location:./login.php?errorMsg=您尚未登录" );
+	exit ();
+}
+
 $bline = new BLine();
 $lines = $bline->getAllLines();
 if(count($lines)>0){
@@ -39,7 +44,18 @@ if(isset($activelineid)){
 			<a class="brand" href="https://wishconsole.com/"> <span
 				class="merchant-header-text"><?php echo WEBSITETITLE?></span>
 			</a>
-
+			<div class="pull-right">
+							<ul class="nav">
+								<li>
+			<?php echo $username?>
+			</li>
+								<li><button>
+										<a href="./login.php?command=exit">注销</a>
+									</button></li>
+			
+							</ul>
+			
+						</div>
 		</div>
 	</div>
 	<!-- END HEADER -->
@@ -63,6 +79,25 @@ if(isset($activelineid)){
     </ul>
         </div>
         <div class="col-md-9">
+        <?php 
+        	if(strcmp($type,TYPE_SUPPLIER) == 0 || strcmp($type,TYPE_HEADQUARTER) == 0){
+        		echo "<div class=\"pull-right\">";
+        		echo "<ul class=\"nav\">";
+
+        		echo "<li class=\"dropdown\">";
+        		echo "<a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">&nbsp;&nbsp;管&nbsp;&nbsp;理&nbsp;&nbsp; <b class=\"caret\"></b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>";
+        		echo "<ul class=\"dropdown-menu\">";
+        		echo "<li><a href=\"./index.php\">发布产品</a></li>";
+        		echo "<li><a href=\"./index.php\">发布促销信息</a></li>";
+				if(strcmp($type,TYPE_HEADQUARTER) == 0){
+					echo "<li><a href=\"./index.php\">审核门店信息</a></li>";
+					echo "<li><a href=\"./index.php\">添加专线</a></li>";
+					echo "<li><a href=\"./addsupplier.php\">添加批发商</a></li>";
+				}        		
+        		echo "</li>";
+        		echo "</ul></div>";
+        	}
+        ?>
         	<h2>Product list</h2>
         	<ul class="nav nav-tabs nav-stacked">
             <?php 

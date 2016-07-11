@@ -6,9 +6,19 @@ include_once dirname ( '__FILE__' ) . '/model/Account.php';
 include_once dirname ( '__FILE__' ) . '/model/User.php';
 header ( "Content-Type: text/html;charset=utf-8" );
 
-$registercommand = $_POST['registercommand'];
+session_start ();
+$currentusername =$_SESSION ['username'];
+$type = $_SESSION['type'];
+session_commit();
+
+if ($currentusername == null) { // 未登录
+	header ( "Location:./login.php?errorMsg=您尚未登录" );
+	exit ();
+}
+
+$addcommand = $_POST['type'];
 $msg = null;
-if(strcmp ( $registercommand, "register" ) == 0){
+if(strcmp ( $addcommand, "register" ) == 0){
 	$username  = $_POST['username'];
 	$email = $_POST ["email"];
 	$password = $_POST ["password"];
@@ -29,7 +39,6 @@ if(strcmp ( $registercommand, "register" ) == 0){
 	
 	$baccount = new BAccount();
 	$newaccountid = $baccount->addAccount($account);
-	echo "<br/>add new account:".$newaccountid;
 
 	if($newaccountid>0){
 		$user = new User();
@@ -43,12 +52,12 @@ if(strcmp ( $registercommand, "register" ) == 0){
 		$buser = new BUser();
 		$newuserid = $buser->addUser($user);
 		if($newuserid<=0){
-			$msg = "注册失败，添加用户信息失败";
+			$msg = "添加批发商信息失败";
 		}else{
-			$msg = "注册成功，请等待管理员审核。";
+			$msg = "添加批发商成功";
 		}
 	}else{
-		$msg = "注册失败，添加账户信息失败";
+		$msg = "添加账户信息失败";
 	}
 }
 ?>
@@ -71,7 +80,19 @@ if(strcmp ( $registercommand, "register" ) == 0){
 			<a class="brand" href="https://wishconsole.com/"> <span
 				class="merchant-header-text"><?php echo WEBSITETITLE?></span>
 			</a>
-
+<div class="pull-right">
+							<ul class="nav">
+								<li>
+			<?php echo $currentusername?>
+			</li>
+								<li><button>
+										<a href="./login.php?command=exit">注销</a>
+									</button></li>
+			
+							</ul>
+			
+						</div>
+		</div>
 		</div>
 	</div>
 	<!-- END HEADER -->
@@ -82,17 +103,17 @@ if(strcmp ( $registercommand, "register" ) == 0){
 
 		<div id="signup-page-content">
 			<div class="signup-page-container">
-				<div class="signup-page-title">注册门店信息</div>
+				<div class="signup-page-title">添加批发商信息</div>
 				<div class="signup-page-content">
 					<form class="form form-horizontal" id="registerform" method="post"
-						action="register.php>">
-						<input type="hidden" name="registercommand" id="registercommand" value = "register"/>
+						action="addsupplier.php?>">
+						<input type="hidden" name="addcommand" id="addcommand" value = "register"/>
 						<?php if($msg != null)
 							echo "<ul align=\"center\"  style=\"color:#F00\">".$msg."</ul>";?>
 						<div class="control-group">
 							<label class="control-label" for="username"><font color="#F00">* </font>用户名</label>
 							<div class="controls input-append">
-								<input type="text" id="username" name="username" class="input-block-level"
+								<input type="text" id="username" name="username" class="input-block-level" value="<?php echo $username?>"
 									placeholder="用户名由字母、数字、下划线组成，字母开头，4-16位"> <span class="add-on"><i class="icon-pencil"></i></span>
 							
 							</div>
@@ -100,7 +121,7 @@ if(strcmp ( $registercommand, "register" ) == 0){
 						<div class="control-group">
 							<label class="control-label" for="email_address"><font color="#F00">* </font>邮箱地址</label>
 							<div class="controls input-append">
-								<input type="text" id="email" name="email" class="input-block-level"
+								<input type="text" id="email" name="email" class="input-block-level" value="<?php echo $email?>"
 									placeholder="示例：hello@example.com"> <span class="add-on"><i
 										class="icon-pencil"></i></span>
 							
@@ -126,7 +147,7 @@ if(strcmp ( $registercommand, "register" ) == 0){
 						<div class="control-group">
 							<label class="control-label" for="realname"><font color="#F00">* </font>姓名</label>
 							<div class="controls input-append">
-								<input type="text" id="realname" name="realname" class="input-block-level"
+								<input type="text" id="realname" name="realname" class="input-block-level" value="<?php echo $realname?>"
 									placeholder="请填写本人真实姓名"> <span class="add-on"><i
 										class="icon-pencil"></i></span>
 							
@@ -135,7 +156,7 @@ if(strcmp ( $registercommand, "register" ) == 0){
 						<div class="control-group">
 							<label class="control-label" for="officeaddress"><font color="#F00">* </font>办公地点</label>
 							<div class="controls input-append">
-								<input type="text" id="officeaddress" name="officeaddress" class="input-block-level"
+								<input type="text" id="officeaddress" name="officeaddress" class="input-block-level" value="<?php echo $officeaddress?>"
 									placeholder="具体的门店地址"> <span class="add-on"><i
 										class="icon-pencil"></i></span>
 							
@@ -144,16 +165,16 @@ if(strcmp ( $registercommand, "register" ) == 0){
 						<div class="control-group">
 							<label class="control-label" for="officetel"><font color="#F00">* </font>联系电话</label>
 							<div class="controls input-append">
-								<input type="text" id="officetel" name="officetel" class="input-block-level"
+								<input type="text" id="officetel" name="officetel" class="input-block-level" value="<?php echo $officetel?>"
 									placeholder="联系电话或手机"> <span class="add-on"><i
 										class="icon-pencil"></i></span>
 							
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="qq">QQ</label>
+							<label class="control-label" for="qq"><font color="#F00">* </font>QQ</label>
 							<div class="controls input-append">
-								<input type="text" id="qq" name="qq" class="input-block-level"
+								<input type="text" id="qq" name="qq" class="input-block-level" value="<?php echo $qq?>"
 									placeholder="qq"> <span class="add-on"><i
 										class="icon-pencil"></i></span>
 							
@@ -281,6 +302,11 @@ if(strcmp ( $registercommand, "register" ) == 0){
 
 			if($.trim($('#officeaddress').val()).length<1){
 				alert("办公地点不能为空");
+				return;
+			}
+
+			if($.trim($('#qq').val()).length<1){
+				alert("qq号码不能为空");
 				return;
 			}
 
