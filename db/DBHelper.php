@@ -50,6 +50,13 @@ class DBHelper {
 		echo "<br/>insert result:" . $result;
 		return mysql_insert_id ();
 	}
+	
+	public function getUsersInfo($type){
+		$usersinfosql = "SELECT * from (SELECT * FROM `account` WHERE type = '".$type."'".
+						" ) a left outer join user on a.id = user.accountid	";
+		return mysql_query($usersinfosql);
+	}
+	
 	public function addLine($line) {
 		$insertline = 'INSERT INTO line (accountid,name,createtime) ' . 'VALUES(' . $line->accountid . ',"' . mysql_real_escape_string ( $line->name ) . '","' . date ( 'Ymd' ) . '")';
 		echo "<br/>insertsql:" . $insertline;

@@ -1,6 +1,7 @@
 <?php
 class Account {
 	public $id, $name, $email, $psd, $createtime, $type, $status;
+	public $user;
 	function __get($property_name) {
 		if (isset ( $this->$property_name )) {
 			return $this->$property_name;

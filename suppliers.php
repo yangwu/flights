@@ -1,7 +1,6 @@
 <?php
 include_once dirname ( '__FILE__' ) . '/config.php';
-include_once dirname ( '__FILE__' ) . '/./business/BLine.php';
-include_once dirname ( '__FILE__' ) . '/./business/BProduct.php';
+include_once dirname ( '__FILE__' ) . '/./business/BAccount.php';
 header ( "Content-Type: text/html;charset=utf-8" );
 session_start ();
 $username =$_SESSION ['username'];
@@ -13,16 +12,9 @@ if ($username == null) { // 未登录
 	exit ();
 }
 
-$bline = new BLine();
-$lines = $bline->getAllLines();
-if(count($lines)>0){
-	$activelineid = $lines[0]->id;	
-}
+$baccount = new BAccount();
+$suppliers = $baccount->getSuppliersInfo();
 
-$bproduct = new BProduct();
-if(isset($activelineid)){
-	$products = $bproduct->getLinePrducts($activelineid);
-}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -62,23 +54,10 @@ if(isset($activelineid)){
 	<!-- SUB HEADER NAV-->
 	<!-- splash page subheader-->
 
-        <div class="col-md-3">
-            <h2>Line list</h2>
-            <ul class="nav nav-tabs nav-stacked">
-            <?php
-            
-            foreach ($lines as $templine){
-            	$isactive = $templine->isactive;
-            	if(strcmp($isactive,LINE_ACTIVE) == 0){
-            		echo "<li class=\"active\"><a href='#'>".$templine->name."</a></li>";
-            	}else{
-            		echo "<li><a href='#'>".$templine->name."</a></li>";
-            	}
-            }
-            ?>
-    </ul>
+        <div class="col-md-2">
+            <h4>返回首页</h4>
         </div>
-        <div class="col-md-9">
+        <div class="col-md-10">
         <?php 
         	if(strcmp($type,TYPE_SUPPLIER) == 0 || strcmp($type,TYPE_HEADQUARTER) == 0){
         		echo "<div class=\"pull-right\">";
@@ -92,20 +71,21 @@ if(isset($activelineid)){
 				if(strcmp($type,TYPE_HEADQUARTER) == 0){
 					echo "<li><a href=\"./index.php\">审核门店信息</a></li>";
 					echo "<li><a href=\"./index.php\">添加专线</a></li>";
-					echo "<li><a href=\"./suppliers.php\">批发商管理</a></li>";
+					echo "<li><a href=\"./addsupplier.php\">添加批发商</a></li>";
 				}        		
         		echo "</li>";
         		echo "</ul></div>";
         	}
         ?>
-        	<h2>Product list</h2>
+        	<h3>批发商列表 &nbsp;&nbsp;&nbsp;&nbsp;<a href="addsupplier.php">添加批发商</a></h3>
         	<ul class="nav nav-tabs nav-stacked">
             <?php 
-            if(count($products)>0)
-	            foreach ($products as $product){
-	            	echo "<li><a href='#'>".$product->title."</a></li>";
+            if(count($suppliers)>0)
+	            foreach ($suppliers as $supplier){
+	            	echo "<li>".$supplier->user->realname."</li>";
 	            }
             ?> 
+            </ul>
         </div>
 
 	<!-- FOOTER -->

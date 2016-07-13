@@ -16,9 +16,9 @@ if ($currentusername == null) { // 未登录
 	exit ();
 }
 
-$addcommand = $_POST['type'];
+$command = $_GET['command'];
 $msg = null;
-if(strcmp ( $addcommand, "register" ) == 0){
+if(strcmp ( $command, "addsupplier" ) == 0){
 	$username  = $_POST['username'];
 	$email = $_POST ["email"];
 	$password = $_POST ["password"];
@@ -34,13 +34,13 @@ if(strcmp ( $addcommand, "register" ) == 0){
 	$account->psd = md5($password);
 	$account->createtime = date('Ymd');
 	
-	$account->status = STATUS_PENDING;
-	$account->type = TYPE_FRONTSTORE;
+	$account->status = STATUS_APPROVED;
+	$account->type = TYPE_SUPPLIER;
 	
 	$baccount = new BAccount();
 	$newaccountid = $baccount->addAccount($account);
 
-	if($newaccountid>0){
+	if($newaccountid>0){	
 		$user = new User();
 		$user->accountid = $newaccountid;
 		$user->realname = $realname;
@@ -106,8 +106,7 @@ if(strcmp ( $addcommand, "register" ) == 0){
 				<div class="signup-page-title">添加批发商信息</div>
 				<div class="signup-page-content">
 					<form class="form form-horizontal" id="registerform" method="post"
-						action="addsupplier.php?>">
-						<input type="hidden" name="addcommand" id="addcommand" value = "register"/>
+						action="addsupplier.php?command=addsupplier">
 						<?php if($msg != null)
 							echo "<ul align=\"center\"  style=\"color:#F00\">".$msg."</ul>";?>
 						<div class="control-group">

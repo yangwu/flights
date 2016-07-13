@@ -1,6 +1,7 @@
 <?php
 include_once dirname ( '__FILE__' ) . '/./db/DBHelper.php';
 include_once dirname ( '__FILE__' ) . '/./model/Account.php';
+include_once dirname ( '__FILE__' ) . '/./model/User.php';
 class BAccount {
 	private $dbhelper;
 	public function __construct() {
@@ -36,5 +37,29 @@ class BAccount {
 			}
 		}
 		return null;
+	}
+	
+	public function getSuppliersInfo(){
+		$suppliers = array();
+		$suppliersResult = $this->dbhelper->getUsersInfo(TYPE_SUPPLIER);
+		if($suppliersResult){
+			while ($supplier = mysql_fetch_array($suppliersResult)){
+				$curAccount = new Account();
+				$curUser = new User();
+				
+				$curAccount->name = $supplier['name'];
+				$curUser->address = $supplier['address'];
+				$curUser->businesslicenseurl = $supplier['businesslicenseurl'];
+				$curUser->qq = $supplier['qq'];
+				$curUser->realname = $supplier['realname'];
+				$curUser->tel = $supplier['tel'];
+				
+				$curAccount->user = $curUser;
+				
+				$suppliers[] = $curAccount;
+			}
+		}
+		
+		return $suppliers;
 	}
 }

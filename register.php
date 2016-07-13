@@ -6,9 +6,9 @@ include_once dirname ( '__FILE__' ) . '/model/Account.php';
 include_once dirname ( '__FILE__' ) . '/model/User.php';
 header ( "Content-Type: text/html;charset=utf-8" );
 
-$registercommand = $_POST['registercommand'];
+$command = $_GET['command'];
 $msg = null;
-if(strcmp ( $registercommand, "register" ) == 0){
+if(strcmp ( $command, "register" ) == 0){
 	$username  = $_POST['username'];
 	$email = $_POST ["email"];
 	$password = $_POST ["password"];
@@ -85,8 +85,7 @@ if(strcmp ( $registercommand, "register" ) == 0){
 				<div class="signup-page-title">注册门店信息</div>
 				<div class="signup-page-content">
 					<form class="form form-horizontal" id="registerform" method="post"
-						action="register.php>">
-						<input type="hidden" name="registercommand" id="registercommand" value = "register"/>
+						action="register.php?command=register>">
 						<?php if($msg != null)
 							echo "<ul align=\"center\"  style=\"color:#F00\">".$msg."</ul>";?>
 						<div class="control-group">

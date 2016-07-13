@@ -5,7 +5,6 @@ include_once dirname ( '__FILE__' ) . '/./model/Account.php';
 header ( "Content-Type: text/html;charset=utf-8" );
 
 session_start ();
-$logincommand = $_POST['type'];
 $command=$_GET['command'];
 if(strcmp($command,"exit") == 0){
 	$_SESSION['username'] = null;
@@ -20,7 +19,7 @@ if ($username != null) { // 登录
 	exit ();
 }
 
-if(strcmp($logincommand,"login") == 0 ){
+if(strcmp($command,"login") == 0 ){
 	$username = $_POST['username'];
 	$psd = $_POST['password'];
 	$baccount = new BAccount();
@@ -84,8 +83,7 @@ if(strcmp($logincommand,"login") == 0 ){
 	<!-- END HEADER -->
 	<!-- SUB HEADER NAV-->
 	<!-- splash page subheader-->
-	<form id="loginform" method="post" action="login.php">
-		<input type="hidden" name="logincommand" id="logincommand" value = "login"/>
+	<form id="loginform" method="post" action="login.php?command=login">
 		<div id="page-content" class="container-fluid  ">
 
 			<div id="login-page-content" class="center">
