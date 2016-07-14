@@ -90,7 +90,7 @@ if(isset($activelineid)){
         		echo "<li><a href=\"./index.php\">发布产品</a></li>";
         		echo "<li><a href=\"./index.php\">发布促销信息</a></li>";
 				if(strcmp($type,TYPE_HEADQUARTER) == 0){
-					echo "<li><a href=\"./index.php\">审核门店信息</a></li>";
+					echo "<li><a href=\"./pendingaccounts.php\">审核门店信息</a></li>";
 					echo "<li><a href=\"./lines.php\">专线管理</a></li>";
 					echo "<li><a href=\"./suppliers.php\">批发商管理</a></li>";
 				}        		

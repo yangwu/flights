@@ -62,4 +62,30 @@ class BAccount {
 		
 		return $suppliers;
 	}
+	
+	public function getPendingAccountInfo(){
+		$pendingaccounts = array();
+		$pendingResult = $this->dbhelper->getUsersInfo(TYPE_FRONTSTORE);
+		if($pendingResult){
+			while($pendingaccount = mysql_fetch_array($pendingResult)){
+				$status = $pendingaccount['status'];
+				if(strcmp($status,STATUS_PENDING) == 0){
+					$curAccount = new Account();
+					$curUser = new User();
+					
+					$curAccount->name = $pendingaccount['name'];
+					$curUser->address = $pendingaccount['address'];
+					$curUser->businesslicenseurl = $pendingaccount['businesslicenseurl'];
+					$curUser->qq = $pendingaccount['qq'];
+					$curUser->realname = $pendingaccount['realname'];
+					$curUser->tel = $pendingaccount['tel'];
+					
+					$curAccount->user = $curUser;
+					
+					$pendingaccounts[] = $curAccount;
+				}
+			}
+		}
+		return $pendingaccounts;
+	}
 }

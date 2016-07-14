@@ -13,7 +13,7 @@ if ($username == null) { // 未登录
 }
 
 $baccount = new BAccount();
-$suppliers = $baccount->getSuppliersInfo();
+$pendingAccounts = $baccount->getPendingAccountInfo();
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -33,7 +33,7 @@ $suppliers = $baccount->getSuppliersInfo();
 	<!-- HEADER -->
 	<div id="header" class="navbar navbar-fixed-top">
 		<div class="container-fluid">
-			<a class="brand" href="https://wishconsole.com/"> <span
+			<a class="brand" href="./index.php"> <span
 				class="merchant-header-text"><?php echo WEBSITETITLE?></span>
 			</a>
 			<div class="pull-right">
@@ -77,14 +77,20 @@ $suppliers = $baccount->getSuppliersInfo();
         		echo "</ul></div>";
         	}
         ?>
-        	<h3>批发商列表 &nbsp;&nbsp;&nbsp;&nbsp;<a href="addsupplier.php">添加批发商</a></h3>
+        	<h3>等待审核的门店信息列表</h3>
         	<ul class="nav nav-tabs nav-stacked">
-            <?php 
-            if(count($suppliers)>0)
-	            foreach ($suppliers as $supplier){
-	            	echo "<li>".$supplier->user->realname."</li>";
+             <?php 
+            if(count($pendingAccounts)>0)
+	            foreach ($pendingAccounts as $pendingAccount){
+	            	echo "<li>".$pendingAccount->user->realname."</li>";
 	            }
             ?> 
+            <li>&nbsp;&nbsp;&nbsp;&nbsp;</li>
+            <li>&nbsp;&nbsp;&nbsp;&nbsp;</li>
+            <li>&nbsp;&nbsp;&nbsp;&nbsp;</li>
+            <li>&nbsp;&nbsp;&nbsp;&nbsp;</li>
+            <li>&nbsp;&nbsp;&nbsp;&nbsp;</li>
+            <li>&nbsp;&nbsp;&nbsp;&nbsp;</li>
             </ul>
         </div>
 
