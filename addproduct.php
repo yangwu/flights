@@ -118,6 +118,23 @@ if(strcmp ( $command, "addsupplier" ) == 0){
 							</div>
 						</div>
 						<div class="control-group">
+							<label class="control-label" for="officelicense"><font color="#F00">* </font>产品图片</label>
+							<div class="controls input-append">
+								<input class="input-block-level required" name="officelicense"
+										id="officelicense" type="text" value=""
+										placeholder="上传营业执照图片" />
+										<p/>
+								<input type="file" name="file1" id="local_license_image" />
+							</div>
+						</div>
+						<div class="control-group" style="display: none;" id="licenseview">
+								<label class="control-label" data-col-index="1"><span
+									class="col-name">预览</span></label>
+								<div class="controls input-append">
+									<img id="license_img_view" width=100 height=100 class="img-thumbnail" src="" alt="photos" />
+								</div>
+							</div>
+						<div class="control-group">
 							<label class="control-label" for="line"><font color="#F00">* </font>所属专线</label>
 							<div class="controls input-append">
 								<input type="text" id="line" name="line" class="input-block-level" value="<?php echo $line?>"
@@ -129,26 +146,17 @@ if(strcmp ( $command, "addsupplier" ) == 0){
 						<div class="control-group">
 							<label class="control-label" for="password"><font color="#F00">* </font>成人票价</label>
 							<div class="controls input-append">
-								<input type="password" id="password" name="password" class="input-block-level"
-									placeholder="输入密码"> <span class="add-on"><i class="icon-pencil"></i></span>
+								<input type="text" id="adultprice" name="adultprice" class="input-block-level"
+									placeholder=" "> <span class="add-on"><i class="icon-pencil"></i></span>
 							
 							</div>
 						</div>
 						<div class="control-group">
 							<label class="control-label" for="confirm_password"><font color="#F00">* </font>儿童票价</label>
 							<div class="controls input-append">
-								<input type="password" id="confirm_password" name="confirm_password"
-									class="input-block-level" placeholder="请再次输入您的密码"> <span
+								<input type="text" id="childprice" name="childprice"
+									class="input-block-level" placeholder=" "> <span
 									class="add-on"><i class="icon-pencil"></i></span>
-							
-							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="realname"><font color="#F00">* </font>行程描述</label>
-							<div class="controls input-append">
-								<input type="text" id="realname" name="realname" class="input-block-level" value="<?php echo $realname?>"
-									placeholder="请填写本人真实姓名"> <span class="add-on"><i
-										class="icon-pencil"></i></span>
 							
 							</div>
 						</div>
@@ -170,23 +178,13 @@ if(strcmp ( $command, "addsupplier" ) == 0){
 							
 							</div>
 						</div>
+						
 						<div class="control-group">
-							<label class="control-label" for="officelicense"><font color="#F00">* </font>产品图片</label>
-							<div class="controls input-append">
-								<input class="input-block-level required" name="officelicense"
-										id="officelicense" type="text" value=""
-										placeholder="上传营业执照图片" />
-										<p/>
-								<input type="file" name="file1" id="local_license_image" />
-							</div>
+							<label class="control-label" for="realname"><font color="#F00">* </font>行程描述</label>
+							<h6>&nbsp;&nbsp;&nbsp;&nbsp;</h6>
+							<script id="editor" type="text/plain" style="width:800px;height:500px;"></script>
 						</div>
-						<div class="control-group" style="display: none;" id="licenseview">
-								<label class="control-label" data-col-index="1"><span
-									class="col-name">预览</span></label>
-								<div class="controls input-append">
-									<img id="license_img_view" width=100 height=100 class="img-thumbnail" src="" alt="photos" />
-								</div>
-							</div>
+						
 						<div id="create-store-container">
 							<input type="button" id="signup-button"
 								class="input-block-level flat-signup-btn"
@@ -220,7 +218,122 @@ if(strcmp ( $command, "addsupplier" ) == 0){
 <script type="text/javascript" src="./js/jquery-2.2.0.min.js" charset="UTF-8"></script>
 <script type="text/javascript" src="./js/bootstrap.min.js"></script>
 <script type="text/javascript" src="./js/jquery.ajaxfileupload.js"></script>
+<script type="text/javascript" charset="utf-8" src="ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="ueditor.all.min.js"> </script>
+<script type="text/javascript" charset="utf-8" src="lang/zh-cn/zh-cn.js"></script>
 <script type="text/javascript">
+			//实例化编辑器
+			//建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
+			var ue = UE.getEditor('editor');
+
+
+		    function isFocus(e){
+		        alert(UE.getEditor('editor').isFocus());
+		        UE.dom.domUtils.preventDefault(e)
+		    }
+		    function setblur(e){
+		        UE.getEditor('editor').blur();
+		        UE.dom.domUtils.preventDefault(e)
+		    }
+		    function insertHtml() {
+		        var value = prompt('插入html代码', '');
+		        UE.getEditor('editor').execCommand('insertHtml', value)
+		    }
+		    function createEditor() {
+		        enableBtn();
+		        UE.getEditor('editor');
+		    }
+		    function getAllHtml() {
+		        alert(UE.getEditor('editor').getAllHtml())
+		    }
+		    function getContent() {
+		        var arr = [];
+		        arr.push("使用editor.getContent()方法可以获得编辑器的内容");
+		        arr.push("内容为：");
+		        arr.push(UE.getEditor('editor').getContent());
+		        alert(arr.join("\n"));
+		    }
+		    function getPlainTxt() {
+		        var arr = [];
+		        arr.push("使用editor.getPlainTxt()方法可以获得编辑器的带格式的纯文本内容");
+		        arr.push("内容为：");
+		        arr.push(UE.getEditor('editor').getPlainTxt());
+		        alert(arr.join('\n'))
+		    }
+		    function setContent(isAppendTo) {
+		        var arr = [];
+		        arr.push("使用editor.setContent('欢迎使用ueditor')方法可以设置编辑器的内容");
+		        UE.getEditor('editor').setContent('欢迎使用ueditor', isAppendTo);
+		        alert(arr.join("\n"));
+		    }
+		    function setDisabled() {
+		        UE.getEditor('editor').setDisabled('fullscreen');
+		        disableBtn("enable");
+		    }
+
+		    function setEnabled() {
+		        UE.getEditor('editor').setEnabled();
+		        enableBtn();
+		    }
+
+		    function getText() {
+		        //当你点击按钮时编辑区域已经失去了焦点，如果直接用getText将不会得到内容，所以要在选回来，然后取得内容
+		        var range = UE.getEditor('editor').selection.getRange();
+		        range.select();
+		        var txt = UE.getEditor('editor').selection.getText();
+		        alert(txt)
+		    }
+
+		    function getContentTxt() {
+		        var arr = [];
+		        arr.push("使用editor.getContentTxt()方法可以获得编辑器的纯文本内容");
+		        arr.push("编辑器的纯文本内容为：");
+		        arr.push(UE.getEditor('editor').getContentTxt());
+		        alert(arr.join("\n"));
+		    }
+		    function hasContent() {
+		        var arr = [];
+		        arr.push("使用editor.hasContents()方法判断编辑器里是否有内容");
+		        arr.push("判断结果为：");
+		        arr.push(UE.getEditor('editor').hasContents());
+		        alert(arr.join("\n"));
+		    }
+		    function setFocus() {
+		        UE.getEditor('editor').focus();
+		    }
+		    function deleteEditor() {
+		        disableBtn();
+		        UE.getEditor('editor').destroy();
+		    }
+		    function disableBtn(str) {
+		        var div = document.getElementById('btns');
+		        var btns = UE.dom.domUtils.getElementsByTagName(div, "button");
+		        for (var i = 0, btn; btn = btns[i++];) {
+		            if (btn.id == str) {
+		                UE.dom.domUtils.removeAttributes(btn, ["disabled"]);
+		            } else {
+		                btn.setAttribute("disabled", "true");
+		            }
+		        }
+		    }
+		    function enableBtn() {
+		        var div = document.getElementById('btns');
+		        var btns = UE.dom.domUtils.getElementsByTagName(div, "button");
+		        for (var i = 0, btn; btn = btns[i++];) {
+		            UE.dom.domUtils.removeAttributes(btn, ["disabled"]);
+		        }
+		    }
+
+		    function getLocalData () {
+		        alert(UE.getEditor('editor').execCommand( "getlocaldata" ));
+		    }
+
+		    function clearLocalData () {
+		        UE.getEditor('editor').execCommand( "clearlocaldata" );
+		        alert("已清空草稿箱")
+		    }
+
+		    
 	function licenseChange (){
 		if($('#officelicense').val() != null && $('#officelicense').val() != ""){
 			$('#licenseview').show();
@@ -265,69 +378,13 @@ if(strcmp ( $command, "addsupplier" ) == 0){
 		});
 
 		$("#signup-button").click(function(){
-			if($.trim($('#username').val()).length<1){
-				alert("用户名不可为空");
-				return;
-			}
-
-			if($.trim($('#email').val()).length<1){
-				alert("邮箱地址不能为空");
-				return;
-			}
-
-			if($.trim($('#password').val()).length<1){
-				alert("密码不能为空");
-				return;
-			}
-
-			if($.trim($('#confirm_password').val()).length<1){
-				alert("请再次输入密码");
-				return;
-			}
-
-			if($.trim($('#realname').val()).length<1){
-				alert("真实姓名不能为空");
-				return;
-			}
-
-			if($.trim($('#officeaddress').val()).length<1){
-				alert("办公地点不能为空");
-				return;
-			}
-
-			if($.trim($('#qq').val()).length<1){
-				alert("qq号码不能为空");
-				return;
-			}
-
-			if($.trim($('#officetel').val()).length<1){
-				alert("联系电话不能为空");
-				return;
-			}
-
-			if($.trim($('#officelicense').val()).length<1){
-				alert("营业执照不能为空");
-				return;
-			} 
-
-			var namepattern = /^[a-zA-z]\w{3,15}$/;
-			if(!namepattern.test($('#username').val())){
-			    alert("用户名格式不正确，用户名由字母、数字、下划线组成，字母开头，4-16位");
-				return;
-			}    
 			
-			var emailpattern = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;
-			if(!emailpattern.test($('#email').val())){
-		    	alert("邮箱格式不正确");
-		    	return;
-		    }
-
-			if($('#password').val() != $('#confirm_password').val()){
-				alert("两次输入的密码不一致，请重新输入");
-				return;
-			}
-
-			$('#registerform').submit();
+			var arr = [];
+	        arr.push("使用editor.getContent()方法可以获得编辑器的内容");
+	        arr.push("内容为：");
+	        arr.push(UE.getEditor('editor').getContent());
+	        alert(arr.join("\n"));
+			//$('#registerform').submit();
 		});
 			
 

@@ -45,7 +45,7 @@ CREATE TABLE `product`(
   `title` varchar(1000),
   `price` varchar(10),
   `childprice` varchar(10),
-  `description` varchar(5000),
+  `description` longtext,
   `photourl` varchar(500),
   `promotephotourl` varchar(500),
   `createtime` varchar(20) DEFAULT NULL,
