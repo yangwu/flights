@@ -2,6 +2,11 @@
 include_once dirname ( '__FILE__' ) . '/config.php';
 include_once dirname ( '__FILE__' ) . '/business/BAccount.php';
 include_once dirname ( '__FILE__' ) . '/business/BUser.php';
+include_once dirname ( '__FILE__' ) . '/business/BLine.php';
+include_once dirname ( '__FILE__' ) . '/business/BProduct.php';
+include_once dirname ( '__FILE__' ) . '/model/Product.php';
+include_once dirname ( '__FILE__' ) . '/model/ProductDate.php';
+include_once dirname ( '__FILE__' ) . '/model/Line.php';
 include_once dirname ( '__FILE__' ) . '/model/Account.php';
 include_once dirname ( '__FILE__' ) . '/model/User.php';
 header ( "Content-Type: text/html;charset=utf-8" );
@@ -16,49 +21,78 @@ if ($currentusername == null) { // 未登录
 	exit ();
 }
 
+$bline = new BLine();
+$lines = $bline->getAllLines();
+
+$dates = array();
+$firstDate = date('Y-m-d');
+$dates[0] = $firstDate;
+$tempDate = $firstDate;
+for($k=1;$k<30;$k++){
+	$nextDate = getNextDate($tempDate);
+	$dates[$k] = $nextDate;
+	$tempDate = $nextDate;
+}
+
 $command = $_GET['command'];
 $msg = null;
-if(strcmp ( $command, "addsupplier" ) == 0){
-	$username  = $_POST['username'];
-	$email = $_POST ["email"];
-	$password = $_POST ["password"];
-	$realname = $_POST ["realname"];
-	$officeaddress = $_POST ["officeaddress"];
-	$officetel = $_POST ["officetel"];
-	$officelicense = $_POST ["officelicense"];
-	$qq = $_POST ["qq"];
+if(strcmp ( $command, "addproduct" ) == 0){
 	
-	$account = new Account();
-	$account->name = $username;
-	$account->email = $email;
-	$account->psd = md5($password);
-	$account->createtime = date('Ymd');
+	$title = $_POST['title'];
+	$thumburl = $_POST['productthumb'];
+	$line = $_POST['line'];
+	$adultprice = $_POST['adultprice'];
+	$childprice = $_POST['childprice'];
+	$availabledates = $_POST['availabledate'];
+	$totalticket = $_POST['totalticket'];
+	$description = $_POST['editor'];
 	
-	$account->status = STATUS_APPROVED;
-	$account->type = TYPE_SUPPLIER;
+	echo "<br/>title:".$title;
+	echo "<br/>thumburl:".$thumburl;
+	echo "<br/>line:".$line;
+	echo "<br/>adultprice:".$adultprice;
+	echo "<br/>childprice:".$childprice;
+	echo "<br/>availabledates:";
+	echo "<br/>totalticket:".$totalticket;
+	echo "<br/>description:".$description;
 	
-	$baccount = new BAccount();
-	$newaccountid = $baccount->addAccount($account);
-
-	if($newaccountid>0){	
-		$user = new User();
-		$user->accountid = $newaccountid;
-		$user->realname = $realname;
-		$user->address = $officeaddress;
-		$user->tel = $officetel;
-		$user->businesslicenseurl = $officelicense;
-		$user->qq = $qq;
-		
-		$buser = new BUser();
-		$newuserid = $buser->addUser($user);
-		if($newuserid<=0){
-			$msg = "添加批发商信息失败";
-		}else{
-			$msg = "添加批发商成功";
-		}
-	}else{
-		$msg = "添加账户信息失败";
+	$bproduct = new BProduct();
+	$product = new Product();
+	$product->childprice = $childprice;
+	$product->description = $description;
+	$product->lineid = $line;
+	$product->photourl = $thumburl;
+	$product->price = $adultprice;
+	$product->title = $title;
+	
+	$datecount = count($availabledates);
+	$productdates = array();
+	for($i=0;$i<$datecount;$i++){
+		echo "<br/>date:".$availabledates[$i];
+		$curproductdate = new ProductDate();
+		$curproductdate->productdate = $availabledates[$i];
+		$curproductdate->total = $totalticket;
+		$curproductdate->inventory = $totalticket;
+		$productdates[] = $curproductdate;
 	}
+	
+	$product->productdates = $productdates;
+	
+	$newproduct = $bproduct->addProduct($product);
+	if($newproduct>0){
+		$msg = "添加产品成功";
+	}else{
+		$msg = "添加产品失败";
+	}
+}
+
+function getNextDate($curdate){
+	return date('Y-m-d',strtotime('+1 day',strtotime($curdate)));
+}
+
+function getWeekofDate($curdate){
+	$weekArr=array("星期日","星期一","星期二","星期三","星期四","星期五","星期六");
+	return $weekArr[date('w',strtotime($curdate))];
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -77,7 +111,7 @@ if(strcmp ( $command, "addsupplier" ) == 0){
 	<!-- HEADER -->
 	<div id="header" class="navbar navbar-fixed-top">
 		<div class="container-fluid">
-			<a class="brand" href="https://wishconsole.com/"> <span
+			<a class="brand" href="./index.php"> <span
 				class="merchant-header-text"><?php echo WEBSITETITLE?></span>
 			</a>
 <div class="pull-right">
@@ -106,7 +140,7 @@ if(strcmp ( $command, "addsupplier" ) == 0){
 				<div class="signup-page-title">添加产品信息</div>
 				<div class="signup-page-content">
 					<form class="form form-horizontal" id="registerform" method="post"
-						action="addsupplier.php?command=addsupplier">
+						action="addproduct.php?command=addproduct">
 						<?php if($msg != null)
 							echo "<ul align=\"center\"  style=\"color:#F00\">".$msg."</ul>";?>
 						<div class="control-group">
@@ -118,36 +152,45 @@ if(strcmp ( $command, "addsupplier" ) == 0){
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="officelicense"><font color="#F00">* </font>产品图片</label>
+							<label class="control-label" for="productthumb"><font color="#F00">* </font>产品图片</label>
 							<div class="controls input-append">
-								<input class="input-block-level required" name="officelicense"
-										id="officelicense" type="text" value=""
-										placeholder="上传营业执照图片" />
+								<input class="input-block-level required" name="productthumb"
+										id="productthumb" type="text" value="<?php echo $thumburl?>"
+										placeholder="产品图片" />
 										<p/>
-								<input type="file" name="file1" id="local_license_image" />
+								<input type="file" name="file1" id="product_image" />
 							</div>
 						</div>
-						<div class="control-group" style="display: none;" id="licenseview">
+						<div class="control-group" style="display: none;" id="productview">
 								<label class="control-label" data-col-index="1"><span
 									class="col-name">预览</span></label>
 								<div class="controls input-append">
-									<img id="license_img_view" width=100 height=100 class="img-thumbnail" src="" alt="photos" />
+									<img id="product_img_view" width=100 height=100 class="img-thumbnail" src="" alt="photos" />
 								</div>
 							</div>
 						<div class="control-group">
 							<label class="control-label" for="line"><font color="#F00">* </font>所属专线</label>
-							<div class="controls input-append">
-								<input type="text" id="line" name="line" class="input-block-level" value="<?php echo $line?>"
-									placeholder=" "> <span class="add-on"><i
-										class="icon-pencil"></i></span>
-							
-							</div>
+							 <div class="controls">
+							 <?php 
+							 echo " <select id=\"line\" name=\"line\" class=\"span6\">";
+							 echo "<option value=\"\" selected=\"selected\">";
+                             echo " 	选择专线";
+                             echo "</option>";
+							 if(count($lines)>0){
+							 	foreach ($lines as $line){
+							 		echo "<li>".$line->name."</li>";
+							 		echo "<option value=\"".$line->id."\">".$line->name."</option>";
+							 	}
+							 }
+							 echo "</select>";
+							 ?>
+                            </div>
 						</div>
 						<div class="control-group">
 							<label class="control-label" for="password"><font color="#F00">* </font>成人票价</label>
 							<div class="controls input-append">
 								<input type="text" id="adultprice" name="adultprice" class="input-block-level"
-									placeholder=" "> <span class="add-on"><i class="icon-pencil"></i></span>
+									placeholder=" " value="<?php echo $adultprice?>"> <span class="add-on"><i class="icon-pencil"></i></span>
 							
 							</div>
 						</div>
@@ -155,25 +198,32 @@ if(strcmp ( $command, "addsupplier" ) == 0){
 							<label class="control-label" for="confirm_password"><font color="#F00">* </font>儿童票价</label>
 							<div class="controls input-append">
 								<input type="text" id="childprice" name="childprice"
-									class="input-block-level" placeholder=" "> <span
+									class="input-block-level" placeholder=" " value="<?php echo $childprice?>"> <span
 									class="add-on"><i class="icon-pencil"></i></span>
 							
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="officeaddress"><font color="#F00">* </font>出行日期</label>
-							<div class="controls input-append">
-								<input type="text" id="officeaddress" name="officeaddress" class="input-block-level" value="<?php echo $officeaddress?>"
-									placeholder="具体的门店地址"> <span class="add-on"><i
-										class="icon-pencil"></i></span>
+							<label class="control-label" for="availabledate"><font color="#F00">* </font>出行日期</label>
+							<div id="choosedate" class="controls input-append">
+							<?php 
+							$count = count($dates);
+							for($i=0;$i<$count;$i++){
+								echo "<label class=\"checkbox\">";
+								echo "<input id=\"availabledate\" name=\"availabledate[]\" type=\"checkbox\" value=\"".$dates[$i]."\">";
+								echo $dates[$i]."&nbsp;&nbsp;".getWeekofDate($dates[$i]);
+								echo "</label>";
+							}
+							?>
 							
 							</div>
 						</div>
+						
 						<div class="control-group">
 							<label class="control-label" for="officetel"><font color="#F00">* </font>每天可售机票总数</label>
 							<div class="controls input-append">
-								<input type="text" id="officetel" name="officetel" class="input-block-level" value="<?php echo $officetel?>"
-									placeholder="联系电话或手机"> <span class="add-on"><i
+								<input type="text" id="totalticket" name="totalticket" class="input-block-level" value="<?php echo $totalticket?>"
+									placeholder="每天可售机票总数"> <span class="add-on"><i
 										class="icon-pencil"></i></span>
 							
 							</div>
@@ -182,7 +232,7 @@ if(strcmp ( $command, "addsupplier" ) == 0){
 						<div class="control-group">
 							<label class="control-label" for="realname"><font color="#F00">* </font>行程描述</label>
 							<h6>&nbsp;&nbsp;&nbsp;&nbsp;</h6>
-							<script id="editor" type="text/plain" style="width:800px;height:500px;"></script>
+							<script id="editor" name="editor" type="text/plain" style="width:800px;height:500px;" ></script>
 						</div>
 						
 						<div id="create-store-container">
@@ -225,7 +275,6 @@ if(strcmp ( $command, "addsupplier" ) == 0){
 			//实例化编辑器
 			//建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
 			var ue = UE.getEditor('editor');
-
 
 		    function isFocus(e){
 		        alert(UE.getEditor('editor').isFocus());
@@ -334,26 +383,27 @@ if(strcmp ( $command, "addsupplier" ) == 0){
 		    }
 
 		    
-	function licenseChange (){
-		if($('#officelicense').val() != null && $('#officelicense').val() != ""){
-			$('#licenseview').show();
-			$('#license_img_view').attr("src",$('#officelicense').val());
+	function thumbChange (){
+		if($('#productthumb').val() != null && $('#productthumb').val() != ""){
+			$('#productview').show();
+			$('#product_img_view').attr("src",$('#productthumb').val());
 	    }else{
-	        $('#licenseview').hide();
+	        $('#productview').hide();
 	    }
 	}
 
 	$(document).ready(function(){
-	    $('#officelicense').bind('input propertychange',function(){
-	    	licenseChange();
+
+	    $('#productthumb').bind('input propertychange',function(){
+	    	thumbChange();
 	    });
 
 
-	   $("#local_license_image").AjaxFileUpload({
+	   $("#product_image").AjaxFileUpload({
 			onComplete: function(filename, response) {
 				switch(response['error']){
 				case 0:
-					$('#officelicense').val("http://www.wishconsole.com/images/" + response['name']);
+					$('#productthumb').val("http://www.wishconsole.com/images/" + response['name']);
 					licenseChange();
 					break;
 				case -1:
@@ -378,17 +428,65 @@ if(strcmp ( $command, "addsupplier" ) == 0){
 		});
 
 		$("#signup-button").click(function(){
-			
-			var arr = [];
-	        arr.push("使用editor.getContent()方法可以获得编辑器的内容");
-	        arr.push("内容为：");
-	        arr.push(UE.getEditor('editor').getContent());
-	        alert(arr.join("\n"));
-			//$('#registerform').submit();
-		});
-			
+			if($.trim($('#title').val()).length<1){
+				alert("标题不可为空");
+				return;
+			}
 
-		
+			if($.trim($('#productthumb').val()).length<1){
+				alert("产品图片不可为空");
+				return;
+			}
+
+			var linechoosed = $("#line option:selected").val();
+			if($.trim(linechoosed).length<1){
+				alert("请选择产品专线");
+				return;
+			}
+
+			var adultprice = $('#adultprice').val();
+			var childprice = $('#childprice').val();
+			
+			if($.trim(adultprice).length<1){
+				alert("成人票价不可为空");
+				return;
+			}
+			if($.trim(childprice).length<1){
+				alert("儿童票价不可为空");
+				return;
+			}  
+			if(isNaN(adultprice) || isNaN(childprice)){
+				alert("票价只能是数字");
+				return;
+			} 
+
+			var chooseddates = "";
+			$("div#choosedate :checked").each(function(){
+				chooseddates +=$(this).val() + "|";
+			})
+			if(chooseddates == ""){
+				alert("请选择出行日期");
+				return;
+			} 
+
+			var totalticket = $('#totalticket').val();
+			if($.trim(totalticket).length<1){
+				alert("机票总数不可为空");
+				return;
+			}  
+			if(isNaN(totalticket)){
+				alert("机票总数只能是数字");
+				return;
+			} 
+				
+			var description = UE.getEditor('editor').getContent();
+			if($.trim(description).length<1){
+				alert("行程描述不可为空");
+				return;
+			}else{
+				} 
+			$('#registerform').submit();
+		});
 	});
 </script>					
 </body>

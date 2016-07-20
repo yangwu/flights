@@ -1,6 +1,6 @@
 <?php
 class ProductDate {
-	private $productdate, $inventory, $total;
+	public $productid,$productdate, $inventory, $total;
 	function __get($property_name) {
 		if (isset ( $this->$property_name )) {
 			return $this->$property_name;

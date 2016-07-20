@@ -7,7 +7,18 @@ class BProduct {
 		$this->dbhelper = new DBHelper ();
 	}
 	public function addProduct($product) {
-		return $this->dbhelper->addProduct ( $product );
+		$productid = $this->dbhelper->addProduct ( $product );
+		
+		$productdates = $product->productdates;
+		$count = count($productdates);
+		for($i=0;$i<$count;$i++){
+			$tempdate = $productdates[$i];
+			echo "<br/>tempdate:".$tempdate->productdate;
+			$tempdate->productid = $productid;
+			$this->addProductDate($productdates[$i]);
+		}
+		
+		return $productid;
 	}
 	public function addProductDate($productdate) {
 		$result = $this->dbhelper->addProductDate ( $productdate );
