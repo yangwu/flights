@@ -71,9 +71,10 @@ if(isset($activelineid)){
             <?php
             
             foreach ($lines as $templine){
-            	$isactive = $templine->isactive;
-            	if(strcmp($isactive,LINE_ACTIVE) == 0){
+            	$templineid = $templine->id;
+            	if($templineid == $activelineid){
             		echo "<li class=\"active\"><a href='#'>".$templine->name."</a></li>";
+            		$activelinename = $templine->name;
             	}else{
             		echo "<li><a href='./index.php?lineid=".$templine->id."'>".$templine->name."</a></li>";
             	}
@@ -108,13 +109,37 @@ if(isset($activelineid)){
         	}
         ?>
         	<h2>Product list</h2>
-        	<ul class="nav nav-tabs nav-stacked">
-            <?php 
-            if(count($products)>0)
-	            foreach ($products as $product){
-	            	echo "<li><a href='#'>".$product->title."</a></li>";
-	            }
-            ?> 
+            <div class="widget">
+            	<div class="widget-header">
+                    <div class="title">
+                      	<?php echo $activelinename;?>
+                    </div>
+                  </div>
+                  <div class="widget-body">
+                  <?php 
+                  if(count($products)>0)
+                  	foreach ($products as $product){
+                  		echo "<table class=\"table table-condensed table-hover no-margin\">";
+                  		echo "<tbody>";
+                  		echo "<tr>";
+                  		echo "<td width=30%>";
+                  		echo "<img src=\"/ueditor/php/upload/image/20160723/1469282531531012.jpg\" width=200 height=200/>";
+                  		echo "</td>";
+                  		echo "<td width=50%>";
+                  		echo "<span  class=\"label label label-info\">";
+                  		echo $product->title;
+                  		echo "</span>";
+                  		echo "</td>";
+                  		echo "<td width=20%>";
+                  		echo "<span  class=\"label label label-info\">";
+                  		echo "成人票价:".$product->price."元.&nbsp;&nbsp;&nbsp;&nbsp; 儿童票价".$product->childprice."元";
+                  		echo "</span>";
+                  		echo "</td></tr></tbody></table>";
+                 	}
+                  ?>
+                  </div>
+                </div>
+            </ul>
         </div>
 
 	<!-- FOOTER -->
