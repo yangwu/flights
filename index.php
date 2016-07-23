@@ -13,10 +13,13 @@ if ($username == null) { // 未登录
 	exit ();
 }
 
+$activelineid = $_GET['lineid'];
+
 $bline = new BLine();
 $lines = $bline->getAllLines();
 if(count($lines)>0){
-	$activelineid = $lines[0]->id;	
+	if($activelineid == null)
+		$activelineid = $lines[0]->id;	
 }
 
 $bproduct = new BProduct();
@@ -41,7 +44,7 @@ if(isset($activelineid)){
 	<!-- HEADER -->
 	<div id="header" class="navbar navbar-fixed-top">
 		<div class="container-fluid">
-			<a class="brand" href="https://wishconsole.com/"> <span
+			<a class="brand" href="./index.php"> <span
 				class="merchant-header-text"><?php echo WEBSITETITLE?></span>
 			</a>
 			<div class="pull-right">
@@ -72,7 +75,7 @@ if(isset($activelineid)){
             	if(strcmp($isactive,LINE_ACTIVE) == 0){
             		echo "<li class=\"active\"><a href='#'>".$templine->name."</a></li>";
             	}else{
-            		echo "<li><a href='#'>".$templine->name."</a></li>";
+            		echo "<li><a href='./index.php?lineid=".$templine->id."'>".$templine->name."</a></li>";
             	}
             }
             ?>
