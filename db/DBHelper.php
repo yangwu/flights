@@ -88,11 +88,23 @@ class DBHelper {
 		$lineproductsql = 'select * from product where lineid = '.$lineid;
 		return mysql_query($lineproductsql);
 	}
+	
+	public function getProduct($id){
+		$productsql = 'select * from product where id='.$id;
+		return mysql_query($productsql);
+	}
+	
 	public function addProductDate($productdate) {
 		$insertproductdate = 'INSERT INTO productdate (productid,productdate,inventory,total) ' . 'VALUES(' . $productdate->productid . ',"' . $productdate->productdate . '",' . $productdate->inventory . ',' . $productdate->total . ')';
 		echo "<br/>insertproductdate:" . $insertproductdate;
 		return mysql_query ( $insertproductdate );
 	}
+	
+	public function getProductDate($pid){
+		$pdatesql = "select * from productdate where productid = ".$pid." order by productdate";
+		return mysql_query($pdatesql);
+	}
+	
 	public function addPurchaseInfo($purchaseInfo) {
 		$insertpurchaseinfo = 'INSERT INTO purchaseinfo (productid,realname,birthday,isadult,productdate,cardtype,cardnumber,cardvalidate,accountid) ' . 'VALUES(' . $purchaseInfo->productid . ',"' . mysql_real_escape_string ( $purchaseInfo->realname ) . '","' . $purchaseInfo->birthday . '",' . $purchaseInfo->isadult . ',"' . $purchaseInfo->productdate . '",' . $purchaseInfo->cardtype . ',"' . mysql_real_escape_string ( $purchaseInfo->cardnumber ) . '","' . $purchaseInfo->cardvalidate . '",' . $purchaseInfo->accountid . ')';
 		echo "<br/>insertpurchaseinfo:" . $insertpurchaseinfo;

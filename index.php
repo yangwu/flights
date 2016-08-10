@@ -127,7 +127,7 @@ if(isset($activelineid)){
                   		echo "</td>";
                   		echo "<td width=50%>";
                   		echo "<span  class=\"label label label-info\">";
-                  		echo $product->title;
+                  		echo "<a target=\"_blank\" href=\"./productdetail.php?id=".$product->id."\">".$product->title."</a>";
                   		echo "</span>";
                   		echo "</td>";
                   		echo "<td width=20%>";
