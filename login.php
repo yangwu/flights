@@ -34,6 +34,7 @@ if(strcmp($command,"login") == 0 ){
 			session_start ();
 			$_SESSION ['username'] = $account->name;
 			$_SESSION['type'] = $account->type;
+			$_SESSION['id'] = $account->id;
 			session_commit();
 			header ( "Location:./index.php" );
 			exit ();

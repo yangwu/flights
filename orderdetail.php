@@ -100,7 +100,7 @@ if($childcount == null)
 							echo "<div class=\"control-group\">";
 							echo "<label class=\"control-label\" for=\"title\"><font color=\"#F00\">* </font>出生日期</label>";
 							echo "<div class=\"controls input-append\">";
-							echo "<input class=\"input-block-level\" type=\"text\" value=\"1980-01-01\" id=\"adatetimepickerb".$a."\" data-date-format=\"yyyy-mm-dd\" placeholder=\"出生日期,可接受：2015-12-25\">";
+							echo "<input class=\"input-block-level\" type=\"text\" value=\"1980-01-01\" name=\"adatetimepickerb".$a."\" id=\"adatetimepickerb".$a."\" data-date-format=\"yyyy-mm-dd\" placeholder=\"出生日期,可接受：2015-12-25\">";
 							echo "</div></div>";
 							
 							echo "<div class=\"control-group\">";
@@ -123,7 +123,7 @@ if($childcount == null)
 							echo "<div class=\"control-group\">";
 							echo "<label class=\"control-label\" for=\"title\"><font color=\"#F00\">* </font>证件有效期</label>";
 							echo "<div class=\"controls input-append\">";
-							echo "<input class=\"input-block-level\" type=\"text\" value=\"2016-12-20\" id=\"adatetimepickerv".$a."\" data-date-format=\"yyyy-mm-dd\" placeholder=\"证件有效日期,可接受：2015-12-25\">";
+							echo "<input class=\"input-block-level\" type=\"text\" value=\"2016-12-20\" name=\"adatetimepickerv".$a."\" id=\"adatetimepickerv".$a."\" data-date-format=\"yyyy-mm-dd\" placeholder=\"证件有效日期,可接受：2015-12-25\">";
 							echo "</div></div><br/>";
 							
 						}
@@ -141,7 +141,7 @@ if($childcount == null)
 							echo "<div class=\"control-group\">";
 							echo "<label class=\"control-label\" for=\"title\"><font color=\"#F00\">* </font>出生日期</label>";
 							echo "<div class=\"controls input-append\">";
-							echo "<input class=\"input-block-level\" type=\"text\" value=\"1980-01-01\" id=\"cdatetimepickerb".$c."\" data-date-format=\"yyyy-mm-dd\" placeholder=\"出生日期,可接受：2015-12-25\">";
+							echo "<input class=\"input-block-level\" type=\"text\" value=\"1980-01-01\" name=\"cdatetimepickerb".$c."\" id=\"cdatetimepickerb".$c."\" data-date-format=\"yyyy-mm-dd\" placeholder=\"出生日期,可接受：2015-12-25\">";
 							echo "</div></div><br/>";
 						}
 						
@@ -187,134 +187,13 @@ if($childcount == null)
 <script type="text/javascript" src="./js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 <script type="text/javascript" src="./js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 <script type="text/javascript">
-			//实例化编辑器
-			//建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
-			var ue = UE.getEditor('editor');
-
-		    function isFocus(e){
-		        alert(UE.getEditor('editor').isFocus());
-		        UE.dom.domUtils.preventDefault(e)
-		    }
-		    function setblur(e){
-		        UE.getEditor('editor').blur();
-		        UE.dom.domUtils.preventDefault(e)
-		    }
-		    function insertHtml() {
-		        var value = prompt('插入html代码', '');
-		        UE.getEditor('editor').execCommand('insertHtml', value)
-		    }
-		    function createEditor() {
-		        enableBtn();
-		        UE.getEditor('editor');
-		    }
-		    function getAllHtml() {
-		        alert(UE.getEditor('editor').getAllHtml())
-		    }
-		    function getContent() {
-		        var arr = [];
-		        arr.push("使用editor.getContent()方法可以获得编辑器的内容");
-		        arr.push("内容为：");
-		        arr.push(UE.getEditor('editor').getContent());
-		        alert(arr.join("\n"));
-		    }
-		    function getPlainTxt() {
-		        var arr = [];
-		        arr.push("使用editor.getPlainTxt()方法可以获得编辑器的带格式的纯文本内容");
-		        arr.push("内容为：");
-		        arr.push(UE.getEditor('editor').getPlainTxt());
-		        alert(arr.join('\n'))
-		    }
-		    function setContent(isAppendTo) {
-		        var arr = [];
-		        arr.push("使用editor.setContent('欢迎使用ueditor')方法可以设置编辑器的内容");
-		        UE.getEditor('editor').setContent('欢迎使用ueditor', isAppendTo);
-		        alert(arr.join("\n"));
-		    }
-		    function setDisabled() {
-		        UE.getEditor('editor').setDisabled('fullscreen');
-		        disableBtn("enable");
-		    }
-
-		    function setEnabled() {
-		        UE.getEditor('editor').setEnabled();
-		        enableBtn();
-		    }
-
-		    function getText() {
-		        //当你点击按钮时编辑区域已经失去了焦点，如果直接用getText将不会得到内容，所以要在选回来，然后取得内容
-		        var range = UE.getEditor('editor').selection.getRange();
-		        range.select();
-		        var txt = UE.getEditor('editor').selection.getText();
-		        alert(txt)
-		    }
-
-		    function getContentTxt() {
-		        var arr = [];
-		        arr.push("使用editor.getContentTxt()方法可以获得编辑器的纯文本内容");
-		        arr.push("编辑器的纯文本内容为：");
-		        arr.push(UE.getEditor('editor').getContentTxt());
-		        alert(arr.join("\n"));
-		    }
-		    function hasContent() {
-		        var arr = [];
-		        arr.push("使用editor.hasContents()方法判断编辑器里是否有内容");
-		        arr.push("判断结果为：");
-		        arr.push(UE.getEditor('editor').hasContents());
-		        alert(arr.join("\n"));
-		    }
-		    function setFocus() {
-		        UE.getEditor('editor').focus();
-		    }
-		    function deleteEditor() {
-		        disableBtn();
-		        UE.getEditor('editor').destroy();
-		    }
-		    function disableBtn(str) {
-		        var div = document.getElementById('btns');
-		        var btns = UE.dom.domUtils.getElementsByTagName(div, "button");
-		        for (var i = 0, btn; btn = btns[i++];) {
-		            if (btn.id == str) {
-		                UE.dom.domUtils.removeAttributes(btn, ["disabled"]);
-		            } else {
-		                btn.setAttribute("disabled", "true");
-		            }
-		        }
-		    }
-		    function enableBtn() {
-		        var div = document.getElementById('btns');
-		        var btns = UE.dom.domUtils.getElementsByTagName(div, "button");
-		        for (var i = 0, btn; btn = btns[i++];) {
-		            UE.dom.domUtils.removeAttributes(btn, ["disabled"]);
-		        }
-		    }
-
-		    function getLocalData () {
-		        alert(UE.getEditor('editor').execCommand( "getlocaldata" ));
-		    }
-
-		    function clearLocalData () {
-		        UE.getEditor('editor').execCommand( "clearlocaldata" );
-		        alert("已清空草稿箱")
-		    }
-
-		    
-	function thumbChange (){
-		if($('#productthumb').val() != null && $('#productthumb').val() != ""){
-			$('#productview').show();
-			$('#product_img_view').attr("src",$('#productthumb').val());
-	    }else{
-	        $('#productview').hide();
-	    }
-	}
 
 	$(document).ready(function(){
 
-	    $('#productthumb').bind('input propertychange',function(){
-	    	thumbChange();
-	    });
-
-
-	    for(var a=1;a<11;a++){
+		var ac = "<?php echo $adultcount;?>";
+		var cc = "<?php echo $childcount;?>";
+		
+	    for(var a=1;a<=ac;a++){
 			var tempb = "adatetimepickerb" + a; 
 	    	$('#' + tempb).datetimepicker({
 		    	language: 'zh-CN',
@@ -344,7 +223,7 @@ if($childcount == null)
 	    	
 		    }
 
-	    for(var c=1;c<11;c++){
+	    for(var c=1;c<=cc;c++){
 			var tempc = "cdatetimepickerb" + c; 
 	    	$('#' + tempc).datetimepicker({
 		    	language: 'zh-CN',
@@ -359,92 +238,41 @@ if($childcount == null)
 		        minView:"month"});
 		    }
 	    
-	   $("#product_image").AjaxFileUpload({
-			onComplete: function(filename, response) {
-				switch(response['error']){
-				case 0:
-					$('#productthumb').val("http://www.wishconsole.com/images/" + response['name']);
-					licenseChange();
-					break;
-				case -1:
-					alert("不支持上传该类型的文件");
-					break;
-				case 1:
-				case 2:
-				case -2:
-					alert("图片大小不能大于4M");
-					break;
-				case 3:
-				case 4:
-				case 5:
-				case 6:	
-				case -3:
-				case -4:
-				case -5:				
-					alert("文件上传出错");
-					break;
+		$("#signup-button").click(function(){
+
+			alert("adult:" + ac + ",child:" + cc);
+			for(var s=1;s<=ac;s++){
+				var tempname = "realname"+s;
+				var tempcardnumber = "cardnumber" + s;
+				alert("value of adult " +s + ": " + $('#'+tempname).val());
+				if($.trim($('#'+tempname).val()).length<1){
+					alert("姓名不可为空");
+					return;
+				}
+
+				if($.trim($('#'+tempcardnumber).val()).length<1){
+					alert("证件号码不可为空");
+					return;
 				}
 			}
-		});
 
-		$("#signup-button").click(function(){
-			if($.trim($('#title').val()).length<1){
-				alert("标题不可为空");
-				return;
+			for(var k=1;k<=cc;k++){
+				var tempcname = "crealname" + k;
+				var tempbdate = "cdatetimepickerb" + k;
+				alert("value of child" +k + ": " + $('#'+tempcname).val());
+				if($.trim($('#'+tempcname).val()).length<1){
+					alert("姓名不可为空");
+					return;
+				}
+
+				if($.trim($('#'+tempbdate).val()).length<1){
+					alert("出生日期不可为空");
+					return;
+				}
 			}
-
-			if($.trim($('#productthumb').val()).length<1){
-				alert("产品图片不可为空");
-				return;
-			}
-
-			var linechoosed = $("#line option:selected").val();
-			if($.trim(linechoosed).length<1){
-				alert("请选择产品专线");
-				return;
-			}
-
-			var adultprice = $('#adultprice').val();
-			var childprice = $('#childprice').val();
 			
-			if($.trim(adultprice).length<1){
-				alert("成人票价不可为空");
-				return;
-			}
-			if($.trim(childprice).length<1){
-				alert("儿童票价不可为空");
-				return;
-			}  
-			if(isNaN(adultprice) || isNaN(childprice)){
-				alert("票价只能是数字");
-				return;
-			} 
-
-			var chooseddates = "";
-			$("div#choosedate :checked").each(function(){
-				chooseddates +=$(this).val() + "|";
-			})
-			if(chooseddates == ""){
-				alert("请选择出行日期");
-				return;
-			} 
-
-			var totalticket = $('#totalticket').val();
-			if($.trim(totalticket).length<1){
-				alert("机票总数不可为空");
-				return;
-			}  
-			if(isNaN(totalticket)){
-				alert("机票总数只能是数字");
-				return;
-			} 
-				
-			var description = UE.getEditor('editor').getContent();
-			if($.trim(description).length<1){
-				alert("行程描述不可为空");
-				return;
-			}else{
-				} 
+			
+			
 			$('#registerform').submit();
 		});
 	});

@@ -100,6 +100,12 @@ class DBHelper {
 		return mysql_query ( $insertproductdate );
 	}
 	
+	public function purchaseProductDate($productid,$productdate){
+		$purchasesql = 'update productdate set inventory = inventory -1 where productid = '.$productid.' and  productdate = "'.$productdate.'"';
+		echo "<br/>purchase sql:".$purchasesql;
+		return mysql_query($purchasesql);
+	}
+	
 	public function getProductDate($pid){
 		$pdatesql = "select * from productdate where productid = ".$pid." order by productdate";
 		return mysql_query($pdatesql);

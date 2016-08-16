@@ -27,6 +27,13 @@ class BProduct {
 			return true;
 		return false;
 	}
+	
+	public function purchaseProductDate($purchaseInfo){
+		$result = $this->dbhelper->purchaseProductDate($purchaseInfo->productid, $purchaseInfo->productdate);
+		if($result)
+			return true;
+		return false;
+	}
 	public function getLinePrducts($lineid){
 		$result = $this->dbhelper->getLineProducts($lineid);
 		$products = array();
