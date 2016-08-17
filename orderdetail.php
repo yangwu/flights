@@ -240,11 +240,9 @@ if($childcount == null)
 	    
 		$("#signup-button").click(function(){
 
-			alert("adult:" + ac + ",child:" + cc);
 			for(var s=1;s<=ac;s++){
 				var tempname = "realname"+s;
 				var tempcardnumber = "cardnumber" + s;
-				alert("value of adult " +s + ": " + $('#'+tempname).val());
 				if($.trim($('#'+tempname).val()).length<1){
 					alert("姓名不可为空");
 					return;
@@ -259,7 +257,6 @@ if($childcount == null)
 			for(var k=1;k<=cc;k++){
 				var tempcname = "crealname" + k;
 				var tempbdate = "cdatetimepickerb" + k;
-				alert("value of child" +k + ": " + $('#'+tempcname).val());
 				if($.trim($('#'+tempcname).val()).length<1){
 					alert("姓名不可为空");
 					return;

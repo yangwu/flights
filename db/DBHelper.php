@@ -96,13 +96,11 @@ class DBHelper {
 	
 	public function addProductDate($productdate) {
 		$insertproductdate = 'INSERT INTO productdate (productid,productdate,inventory,total) ' . 'VALUES(' . $productdate->productid . ',"' . $productdate->productdate . '",' . $productdate->inventory . ',' . $productdate->total . ')';
-		echo "<br/>insertproductdate:" . $insertproductdate;
 		return mysql_query ( $insertproductdate );
 	}
 	
 	public function purchaseProductDate($productid,$productdate){
 		$purchasesql = 'update productdate set inventory = inventory -1 where productid = '.$productid.' and  productdate = "'.$productdate.'"';
-		echo "<br/>purchase sql:".$purchasesql;
 		return mysql_query($purchasesql);
 	}
 	
