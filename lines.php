@@ -54,10 +54,7 @@ $lines = $bline->getAllLines();
 	<!-- SUB HEADER NAV-->
 	<!-- splash page subheader-->
 
-        <div class="col-md-2">
-            <h4>返回首页</h4>
-        </div>
-        <div class="col-md-10">
+        <div class="widget">
         <?php 
         	if(strcmp($type,TYPE_SUPPLIER) == 0 || strcmp($type,TYPE_HEADQUARTER) == 0){
         		echo "<div class=\"pull-right\">";

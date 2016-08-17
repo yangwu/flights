@@ -76,4 +76,15 @@ class BProduct {
 		$product->productdates = $dates;
 		return $product;
 	}
+	
+	public function isInventoryAvailable($productid,$productdate,$countpersons){
+		$result = $this->dbhelper->getInventory($productid, $productdate, $countpersons);
+		if($temp = mysql_fetch_array($result)){
+			$inventory = $temp['inventory'];
+			if($inventory >= $countpersons){
+				return true;
+			}
+		}
+		return false;
+	}
 }

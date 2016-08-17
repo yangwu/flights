@@ -29,6 +29,13 @@ $adultcount = $_POST['adultcount'];
 $childcount = $_POST['childcount'];
 if($childcount == null)
 	$childcount = 0;
+	
+$bp = new BProduct();
+$available = true;
+if(!$bp->isInventoryAvailable($productid, $pdate, $adultcount+$childcount)){
+	$msg = "当前出游人数超出了剩余票数，请返回重新选择";
+	$available = false;
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -88,7 +95,9 @@ if($childcount == null)
 							echo "<ul align=\"center\"  style=\"color:#F00\">".$msg."</ul>";?>
 						
 						
-						<?php for($a=1;$a<$adultcount+1;$a++){
+						<?php
+						if($available){
+						for($a=1;$a<$adultcount+1;$a++){
 							
 							echo "<div class=\"signup-page-title\" align=\"left\">第<font color=\"#F00\">&nbsp;&nbsp;".$a."&nbsp;&nbsp;</font>位成人</div>";
 							echo "<div class=\"control-group\">";
@@ -145,15 +154,22 @@ if($childcount == null)
 							echo "</div></div><br/>";
 						}
 						
+						}
 						?>
 						
-						
+						<?php if($available){?>
 						<div id="create-store-container">
 							<input type="button" id="signup-button"
 								class="input-block-level flat-signup-btn"
 								value="提交">
-						
 						</div>
+						<?php }else{?>
+						<div id="create-store-container">
+							<input type="button" id="orderback"
+								class="input-block-level flat-signup-btn"
+								value="返回">
+						</div>
+						<?php }?>
 					</form>
 				</div>
 			</div>
@@ -237,7 +253,10 @@ if($childcount == null)
 		        startView:"decade",
 		        minView:"month"});
 		    }
-	    
+
+	    $("#orderback").click(function(){
+	    	window.history.back(-1); 
+		});
 		$("#signup-button").click(function(){
 
 			for(var s=1;s<=ac;s++){

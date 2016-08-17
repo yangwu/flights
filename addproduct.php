@@ -47,15 +47,6 @@ if(strcmp ( $command, "addproduct" ) == 0){
 	$totalticket = $_POST['totalticket'];
 	$description = $_POST['editor'];
 	
-	echo "<br/>title:".$title;
-	echo "<br/>thumburl:".$thumburl;
-	echo "<br/>line:".$line;
-	echo "<br/>adultprice:".$adultprice;
-	echo "<br/>childprice:".$childprice;
-	echo "<br/>availabledates:";
-	echo "<br/>totalticket:".$totalticket;
-	echo "<br/>description:".$description;
-	
 	$bproduct = new BProduct();
 	$product = new Product();
 	$product->childprice = $childprice;
@@ -68,7 +59,6 @@ if(strcmp ( $command, "addproduct" ) == 0){
 	$datecount = count($availabledates);
 	$productdates = array();
 	for($i=0;$i<$datecount;$i++){
-		echo "<br/>date:".$availabledates[$i];
 		$curproductdate = new ProductDate();
 		$curproductdate->productdate = $availabledates[$i];
 		$curproductdate->total = $totalticket;
@@ -404,7 +394,7 @@ function getWeekofDate($curdate){
 				switch(response['error']){
 				case 0:
 					$('#productthumb').val("http://www.wishconsole.com/images/" + response['name']);
-					licenseChange();
+					thumbChange();
 					break;
 				case -1:
 					alert("不支持上传该类型的文件");

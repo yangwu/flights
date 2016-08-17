@@ -66,7 +66,7 @@ if(isset($activelineid)){
 	<!-- splash page subheader-->
 
         <div class="col-md-3">
-            <h2>Line list</h2>
+            <h2>专线</h2>
             <ul class="nav nav-tabs nav-stacked">
             <?php
             
@@ -108,7 +108,7 @@ if(isset($activelineid)){
         		echo "</ul></div>";
         	}
         ?>
-        	<h2>Product list</h2>
+        	<h2>产品</h2>
             <div class="widget">
             	<div class="widget-header">
                     <div class="title">
@@ -123,7 +123,7 @@ if(isset($activelineid)){
                   		echo "<tbody>";
                   		echo "<tr>";
                   		echo "<td width=30%>";
-                  		echo "<img src=\"/ueditor/php/upload/image/20160723/1469282531531012.jpg\" width=200 height=200/>";
+                  		echo "<img src=\"".$product->photourl."\" width=200 height=200/>";
                   		echo "</td>";
                   		echo "<td width=50%>";
                   		echo "<span  class=\"label label label-info\">";

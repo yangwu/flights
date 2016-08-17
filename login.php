@@ -40,7 +40,6 @@ if(strcmp($command,"login") == 0 ){
 			exit ();
 		}
 	}else{
-		echo "<br/>login failed";
 		$errorMsg = "登录失败，用户名或密码错误.";
 	}
 }

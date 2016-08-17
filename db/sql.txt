@@ -36,6 +36,7 @@ CREATE TABLE `line`(
   `createtime` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) DEFAULT CHARSET=utf8;
+ALTER TABLE `line` ADD UNIQUE(`name`);
 
 
 DROP TABLE IF EXISTS `product`;

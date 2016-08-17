@@ -68,7 +68,7 @@ if(strcmp ( $command, "register" ) == 0){
 	<!-- HEADER -->
 	<div id="header" class="navbar navbar-fixed-top">
 		<div class="container-fluid">
-			<a class="brand" href="https://wishconsole.com/"> <span
+			<a class="brand" href="https://wishconsole.com/flights"> <span
 				class="merchant-header-text"><?php echo WEBSITETITLE?></span>
 			</a>
 
@@ -85,7 +85,7 @@ if(strcmp ( $command, "register" ) == 0){
 				<div class="signup-page-title">注册门店信息</div>
 				<div class="signup-page-content">
 					<form class="form form-horizontal" id="registerform" method="post"
-						action="register.php?command=register>">
+						action="register.php?command=register">
 						<?php if($msg != null)
 							echo "<ul align=\"center\"  style=\"color:#F00\">".$msg."</ul>";?>
 						<div class="control-group">
