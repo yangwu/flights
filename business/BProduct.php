@@ -2,6 +2,7 @@
 include_once dirname ( '__FILE__' ) . '/./db/DBHelper.php';
 include_once dirname ( '__FILE__' ) . '/./model/Product.php';
 include_once dirname ( '__FILE__' ) . '/./model/ProductDate.php';
+include_once dirname ( '__FILE__' ) . '/./model/PurchaseInfo.php';
 class BProduct {
 	private $dbhelper;
 	public function __construct() {
@@ -86,5 +87,25 @@ class BProduct {
 			}
 		}
 		return false;
+	}
+	
+	public function getorders($productid){
+		$orders = array();
+		$result = $this->dbhelper->getorders($productid);
+		while($temporder = mysql_fetch_array($result)){
+			$purchase = new PurchaseInfo();
+			$purchase->accountid = $temporder['accountid'];
+			$purchase->birthday = $temporder['birthday'];
+			$purchase->cardnumber = $temporder['cardnumber'];
+			$purchase->cardtype = $temporder['cardtype'];
+			$purchase->cardvalidate = $temporder['cardvalidate'];
+			$purchase->isadult = $temporder['isadult'];
+			$purchase->productdate = $temporder['productdate'];
+			$purchase->productid = $temporder['productid'];
+			$purchase->realname = $temporder['realname'];
+			$purchase->createtime = $temporder['createtime'];
+			$orders[] = $purchase;
+		}
+		return $orders;
 	}
 }

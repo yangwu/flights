@@ -101,11 +101,17 @@ class DBHelper {
 	}
 	
 	public function addPurchaseInfo($purchaseInfo) {
-		$insertpurchaseinfo = 'INSERT INTO purchaseinfo (productid,realname,birthday,isadult,productdate,cardtype,cardnumber,cardvalidate,accountid) ' . 'VALUES(' . $purchaseInfo->productid . ',"' . mysql_real_escape_string ( $purchaseInfo->realname ) . '","' . $purchaseInfo->birthday . '",' . $purchaseInfo->isadult . ',"' . $purchaseInfo->productdate . '",' . $purchaseInfo->cardtype . ',"' . mysql_real_escape_string ( $purchaseInfo->cardnumber ) . '","' . $purchaseInfo->cardvalidate . '",' . $purchaseInfo->accountid . ')';
+		$insertpurchaseinfo = 'INSERT INTO purchaseinfo (productid,realname,birthday,isadult,productdate,cardtype,cardnumber,cardvalidate,accountid,createtime) ' . 'VALUES(' . $purchaseInfo->productid . ',"' . mysql_real_escape_string ( $purchaseInfo->realname ) . '","' . $purchaseInfo->birthday . '",' . $purchaseInfo->isadult . ',"' . $purchaseInfo->productdate . '",' . $purchaseInfo->cardtype . ',"' . mysql_real_escape_string ( $purchaseInfo->cardnumber ) . '","' . $purchaseInfo->cardvalidate . '",' . $purchaseInfo->accountid . ',"'.date ( 'Ymd H:i:s' ).'")';
 		echo "<br/>insertpurchaseinfo:" . $insertpurchaseinfo;
 		$result = mysql_query ( $insertpurchaseinfo );
 		echo "<br/>insert purchaseinfo result:" . $result;
 		return mysql_insert_id ();
+	}
+	
+	public function getorders($productid){
+		$ordersql = "select * from purchaseinfo where productid = ".$productid." order by createtime desc";
+		echo "<br/>get orders:".$ordersql;
+		return mysql_query($ordersql);
 	}
 	
 	public function getInventory($productid,$productdate,$countpersons){

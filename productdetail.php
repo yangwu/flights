@@ -20,6 +20,8 @@ if(isset($pid)){
 	$bp = new BProduct();
 	$product = $bp->getProductById($pid);
 	$productdates = $product->productdates;
+	
+	$orders = $bp->getorders($pid);
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -108,8 +110,48 @@ if(isset($pid)){
 
 		<dir class="row-fluid widget">
 			<div class="widget-header">
-			<div class="title"><h4>产品描述</h4></div></div>
-			<div class="widget-body"><?php echo $product->description?></div>
+			
+			<ul id="myTab" class="nav nav-tabs">
+   <li class="active">
+      <a href="#desc" data-toggle="tab">
+         产品描述
+      </a>
+   </li>
+   <li><a href="#orders" data-toggle="tab">购买记录</a></li>
+</ul>
+<div id="myTabContent" class="tab-content">
+   <div class="tab-pane fade in active" id="desc">
+     <div class="widget-body"><?php echo $product->description?></div>
+   </div>
+   <div class="tab-pane fade" id="orders">
+      <?php $ordercount = count($orders);
+        if($ordercount>0){
+        	echo "<div class=\"widget-body\"><table class=\"table table-condensed table-striped table-bordered table-hover no-margin\"><thead><tr>";
+        	echo "<th style=\"width:10%\">出游日期</th><th style=\"width:30%\" class=\"hidden-phone\">姓名</th>";
+        	echo "<th style=\"width:30%\" class=\"hidden-phone\">证件信息</th><th style=\"width:20%\" class=\"hidden-phone\">生日</th><th style=\"width:10%\" class=\"hidden-phone\">订购时间</th></tr></thead>";
+        	echo "<tbody>";
+        	
+        	for($k=0;$k<$ordercount;$k++){
+        		$order = $orders[$k];
+        		
+        		if ($k % 2 == 0) {
+        			echo "<tr>";
+        		} else {
+        			echo "<tr class=\"gradeA success\">";
+        		}
+        		echo "<td style=\"width:10%;vertical-align:middle;\">".$order->productdate."</td>";
+        		echo "<td style=\"width:30%;vertical-align:middle;\">".$order->realname.$order->isadult."</td>";
+        		echo "<td style=\"width:30%;vertical-align:middle;\">".$order->cardtype.$order->cardnumber.$order->cardvalidate."</td>";
+        		echo "<td style=\"width:20%;vertical-align:middle;\">".$order->birthday."</td>";
+        		echo "<td style=\"width:10%;vertical-align:middle;\">".$order->createtime."</td>";
+        		echo "</tr>";
+        	}
+        }
+      ?>
+   </div>
+</div>
+			
+			
 		</dir>
 		</form>
 	</div>

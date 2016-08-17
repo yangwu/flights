@@ -74,5 +74,6 @@ CREATE TABLE `purchaseinfo`(
   `cardtype` int(1),
   `cardnumber` varchar(50),
   `cardvalidate` varchar(20),
+  `createtime` varchar(20) DEFAULT NULL,
   PRIMARY KEY(`id`)
 ) DEFAULT CHARSET=utf8;
