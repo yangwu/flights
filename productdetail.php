@@ -140,8 +140,8 @@ if(isset($pid)){
         			echo "<tr class=\"gradeA success\">";
         		}
         		echo "<td style=\"width:10%;vertical-align:middle;\">".$order->productdate."</td>";
-        		echo "<td style=\"width:30%;vertical-align:middle;\">".$order->realname.$order->isadult."</td>";
-        		echo "<td style=\"width:30%;vertical-align:middle;\">".$order->cardtype.$order->cardnumber.$order->cardvalidate."</td>";
+        		echo "<td style=\"width:30%;vertical-align:middle;\">".$order->realname.$order->getUIIsChild()."</td>";
+        		echo "<td style=\"width:30%;vertical-align:middle;\">".$order->getUICardInfo()."</td>";
         		echo "<td style=\"width:20%;vertical-align:middle;\">".$order->birthday."</td>";
         		echo "<td style=\"width:10%;vertical-align:middle;\">".$order->createtime."</td>";
         		echo "</tr>";

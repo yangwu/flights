@@ -15,3 +15,12 @@ define('STATUS_DELETED','3');//已删除
 //Line Active状态:
 define('LINE_INACTIVE','0');
 define('LINE_ACTIVE','1');
+
+//Card Type:
+define('IDCARD','身份证');
+define('PASSPORT','护照');
+define('OFFICERCARD','军官证');
+define('HONGKONGCARD','港澳通行证');
+define('TAICARD','台胞证');
+
+define('CARDARRAY',serialize(array('1'=>IDCARD,'2'=>PASSPORT,'3'=>OFFICERCARD,'4'=>HONGKONGCARD,'5'=>TAICARD)));

@@ -21,6 +21,8 @@ if ($currentusername == null) { // 未登录
 	exit ();
 }
 
+$cards=unserialize(CARDARRAY);
+
 
 $productid = $_POST['productid'];
 $productname = $_POST['productname'];
@@ -116,11 +118,10 @@ if(!$bp->isInventoryAvailable($productid, $pdate, $adultcount+$childcount)){
 							echo "<label class=\"control-label\" for=\"title\"><font color=\"#F00\">* </font>证件类型</label>";
 							echo "<div class=\"controls input-append\">";
 							echo "<select id=\"cardtype".$a."\" name=\"cardtype".$a."\" class=\"span6\">";
-							echo "<option value=\"1\">身份证</option>";
-							echo "<option value=\"2\">护照</option>";
-							echo "<option value=\"3\">军官证</option>";
-							echo "<option value=\"4\">港澳通行证</option>";
-							echo "<option value=\"5\">台胞证</option>";
+							
+							foreach ($cards as $k=>$v){
+								echo "<option value=\"".$k."\">".$v."</option>";	
+							}
 							echo "	</select></div></div>";
 							
 							echo "<div class=\"control-group\">";
