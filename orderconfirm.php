@@ -55,8 +55,7 @@ $bp = new BProduct();
 $count = count($addresses);
 for($i=0;$i<$count;$i++){
 	$purchaseinfo = $addresses[$i];
-	if($bp->purchaseProductDate($purchaseinfo)){
-		$bpi->addPurchaseInfo($purchaseinfo);
+	if($bpi->addPurchaseInfo($purchaseinfo)){
 		echo "<br/>订购操作成功:".$purchaseinfo->productid."  ".$purchaseinfo->realname.$purchaseinfo->productdate;
 	}else{
 		echo "<br/>订购操作失败:".$purchaseinfo->productid."  ".$purchaseinfo->realname.$purchaseinfo->productdate;

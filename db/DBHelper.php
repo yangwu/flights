@@ -101,16 +101,27 @@ class DBHelper {
 	}
 	
 	public function addPurchaseInfo($purchaseInfo) {
+		$result = true;
 		$insertpurchaseinfo = 'INSERT INTO purchaseinfo (productid,realname,birthday,isadult,productdate,cardtype,cardnumber,cardvalidate,accountid,createtime) ' . 'VALUES(' . $purchaseInfo->productid . ',"' . mysql_real_escape_string ( $purchaseInfo->realname ) . '","' . $purchaseInfo->birthday . '",' . $purchaseInfo->isadult . ',"' . $purchaseInfo->productdate . '",' . $purchaseInfo->cardtype . ',"' . mysql_real_escape_string ( $purchaseInfo->cardnumber ) . '","' . $purchaseInfo->cardvalidate . '",' . $purchaseInfo->accountid . ',"'.date ( 'Ymd H:i:s' ).'")';
-		echo "<br/>insertpurchaseinfo:" . $insertpurchaseinfo;
-		$result = mysql_query ( $insertpurchaseinfo );
-		echo "<br/>insert purchaseinfo result:" . $result;
-		return mysql_insert_id ();
+		$updateInventorysql = 'update productdate set inventory = inventory -1 where productid = '. $purchaseInfo->productid.' and  productdate = "'.$purchaseInfo->productdate.'"';
+		
+		mysql_query("BEGIN");
+		$insertResult = mysql_query ( $insertpurchaseinfo );
+		$updateInventoryResult =  mysql_query($updateInventorysql);
+		
+		if($insertResult && $updateInventoryResult){
+			mysql_query("COMMIT");
+		}else{
+			mysql_query("ROLLBACK");
+			$result = false;
+		}
+		mysql_query("END");
+		
+		return $result;
 	}
 	
 	public function getorders($productid){
 		$ordersql = "select * from purchaseinfo where productid = ".$productid." order by createtime desc";
-		echo "<br/>get orders:".$ordersql;
 		return mysql_query($ordersql);
 	}
 	
