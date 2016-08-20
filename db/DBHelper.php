@@ -30,6 +30,45 @@ class DBHelper {
 		$result = mysql_query ( $insertsql );
 		return mysql_insert_id ();
 	}
+	
+	public function addAccountInfo($account,$user,$lines){
+		$result = true;
+		
+		$insertAccountsql = 'INSERT INTO account (name,psd,email,createtime,status,type) ' . 'VALUES("' . mysql_real_escape_string ( $account->name ) . '","' . mysql_real_escape_string ( $account->psd ) . '","' . mysql_real_escape_string ( $account->email ) . '","' . date ( 'Ymd' ) . '",' . $account->status . ',' . $account->type . ')';
+		
+		mysql_query("BEGIN");
+	
+		$accountresult = mysql_query ( $insertAccountsql );
+		$newaccountid = mysql_insert_id ();
+		if($newaccountid>0){
+			$insertusersql = 'INSERT INTO user (accountid,realname,address,qq,tel,businesslicenseurl) ' . 'VALUES(' . $newaccountid . ',"' . mysql_real_escape_string ( $user->realname ) . '","' . mysql_real_escape_string ( $user->address ) . '","' . $user->qq . '","' . $user->tel . '","' . $user->businesslicenseurl . '")';
+			$userresult = mysql_query ( $insertusersql );
+			$newuserid = mysql_insert_id ();
+			if($newuserid>0){
+				$count = count($lines);
+				for($i=0;$i<$count;$i++){
+					$updateline = 'UPDATE line set accountid = ' . $newaccountid . ' where id = ' . $lines[$i];
+					$updateresult = mysql_query($updateline);
+					if(!$updateresult){
+						mysql_query("ROLLBACK");
+						$result = false;
+						return $result;
+					}
+				}
+			}
+		}
+		
+		
+		if($newaccountid && $newuserid){
+			mysql_query("COMMIT");
+		}else{
+			mysql_query("ROLLBACK");
+			$result = false;
+		}
+		mysql_query("END");
+		return $result;
+	}
+	
 	public function checkAccount($account) {
 		$querySql = 'select id,name,email from account where email = "' . mysql_real_escape_string ( $account->email ) . '" or name = "' . mysql_real_escape_string ( $account->name ) . '"';
 		echo "<br/>check sql:" . $querySql;
@@ -75,6 +114,12 @@ class DBHelper {
 		$sql = 'SELECT * FROM line order by createtime,id';
 		return mysql_query($sql);
 	}
+
+	public function getUnAllocatedLines(){
+		$unallocateLineSql = 'SELECT * FROM line where accountid = 0 order by createtime,id';
+		return mysql_query($unallocateLineSql);
+	} 
+
 	public function addProduct($product) {
 		$insertproduct = 'INSERT INTO product (lineid,title,description,price,childprice,photourl,promotephotourl,createtime) ' . 'VALUES(' . $product->lineid . ',"' . mysql_real_escape_string ( $product->title ) . '","' . mysql_real_escape_string ( $product->description ) . '","' . $product->price . '","' . $product->childprice . '","' . $product->photourl . '","' . $product->promotephotourl . '","' . date ( 'Ymd' ) . '")';
 		$result = mysql_query ( $insertproduct );

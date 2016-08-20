@@ -54,9 +54,6 @@ $suppliers = $baccount->getSuppliersInfo();
 	<!-- SUB HEADER NAV-->
 	<!-- splash page subheader-->
 
-        <div class="col-md-2">
-            <h4>返回首页</h4>
-        </div>
         <div class="col-md-10">
         <?php 
         	if(strcmp($type,TYPE_SUPPLIER) == 0 || strcmp($type,TYPE_HEADQUARTER) == 0){

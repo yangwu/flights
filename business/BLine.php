@@ -32,4 +32,18 @@ class BLine {
 		}
 		return $lines;
 	}
+	
+	public function getUnAllocatedLines(){
+		$result = $this->dbhelper->getUnAllocatedLines();
+		$lines = array();
+		while($temp = mysql_fetch_array($result)){
+			$line = new Line();
+			$line->name = $temp['name'];
+			$line->id = $temp['id'];
+			$line->createtime = $temp['createtime'];
+			$line->accountid = $temp['accountid'];
+			$lines[] = $line;
+		}
+		return $lines;
+	}
 }

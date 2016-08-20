@@ -2,8 +2,10 @@
 include_once dirname ( '__FILE__' ) . '/config.php';
 include_once dirname ( '__FILE__' ) . '/business/BAccount.php';
 include_once dirname ( '__FILE__' ) . '/business/BUser.php';
+include_once dirname ( '__FILE__' ) . '/business/BLine.php';
 include_once dirname ( '__FILE__' ) . '/model/Account.php';
 include_once dirname ( '__FILE__' ) . '/model/User.php';
+include_once dirname ( '__FILE__' ) . '/model/Line.php';
 header ( "Content-Type: text/html;charset=utf-8" );
 
 session_start ();
@@ -18,6 +20,10 @@ if ($currentusername == null) { // 未登录
 
 $command = $_GET['command'];
 $msg = null;
+
+$bline = new BLine();
+$lines = $bline->getUnAllocatedLines();
+
 if(strcmp ( $command, "addsupplier" ) == 0){
 	$username  = $_POST['username'];
 	$email = $_POST ["email"];
@@ -27,6 +33,7 @@ if(strcmp ( $command, "addsupplier" ) == 0){
 	$officetel = $_POST ["officetel"];
 	$officelicense = $_POST ["officelicense"];
 	$qq = $_POST ["qq"];
+	$lineids = $_POST['availablelines'];
 	
 	$account = new Account();
 	$account->name = $username;
@@ -37,17 +44,25 @@ if(strcmp ( $command, "addsupplier" ) == 0){
 	$account->status = STATUS_APPROVED;
 	$account->type = TYPE_SUPPLIER;
 	
-	$baccount = new BAccount();
-	$newaccountid = $baccount->addAccount($account);
+	$user = new User();
+	$user->accountid = $newaccountid;
+	$user->realname = $realname;
+	$user->address = $officeaddress;
+	$user->tel = $officetel;
+	$user->businesslicenseurl = $officelicense;
+	$user->qq = $qq;
 
+	$baccount = new BAccount();
+	$addresult = $baccount->addAccountInfo($account, $user, $lineids);
+	
+	if($addresult<=0){
+		$msg = "添加批发商信息失败";
+	}else{
+		$msg = "添加批发商成功";
+	}
+	/* 
 	if($newaccountid>0){	
-		$user = new User();
-		$user->accountid = $newaccountid;
-		$user->realname = $realname;
-		$user->address = $officeaddress;
-		$user->tel = $officetel;
-		$user->businesslicenseurl = $officelicense;
-		$user->qq = $qq;
+		
 		
 		$buser = new BUser();
 		$newuserid = $buser->addUser($user);
@@ -58,7 +73,7 @@ if(strcmp ( $command, "addsupplier" ) == 0){
 		}
 	}else{
 		$msg = "添加账户信息失败";
-	}
+	} */
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -196,6 +211,24 @@ if(strcmp ( $command, "addsupplier" ) == 0){
 									<img id="license_img_view" width=100 height=100 class="img-thumbnail" src="" alt="photos" />
 								</div>
 							</div>
+							
+						<div class="control-group">
+							<label class="control-label"><font color="#F00">* </font>选择负责的专线:</label>
+							<div  id="chooseline" class="controls input-append">
+							
+							<?php 
+							if(count($lines)>0){
+								foreach ($lines as $line){
+									echo "<label class=\"checkbox\">";
+									echo "<input id=\"availablelines\" name=\"availablelines[]\" type=\"checkbox\" value=\"".$line->id."\">";
+									echo $line->name;
+									echo "</label>";
+								}
+							}
+							?>
+							
+							</div>
+						</div>
 						<div id="create-store-container">
 							<input type="button" id="signup-button"
 								class="input-block-level flat-signup-btn"

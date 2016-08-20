@@ -13,6 +13,11 @@ class BAccount {
 		}
 		return $this->dbhelper->addAccount ( $account );
 	}
+	
+	public function addAccountInfo($account,$user,$lines){
+		return $this->dbhelper->addAccountInfo($account, $user, $lines);
+	}
+	
 	public function isAccountExisted($account) {
 		$result = $this->dbhelper->checkAccount ( $account );
 		if ($result) {
