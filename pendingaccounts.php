@@ -11,8 +11,18 @@ if ($username == null) { // 未登录
 	header ( "Location:./login.php?errorMsg=您尚未登录" );
 	exit ();
 }
+$pendingid = $_GET['i'];
+$pendingflag = $_GET['f'];
 
 $baccount = new BAccount();
+if($pendingid != null && $pendingflag != null){
+	if(strcmp($pendingflag,'0')){
+		$result = $baccount->updateAccountStatus($pendingid, STATUS_DELETED);
+	}else if(strcmp($pendingflag,'1')){
+		$result = $baccount->updateAccountStatus($pendingid,STATUS_APPROVED);
+	}	
+}
+
 $pendingAccounts = $baccount->getPendingAccountInfo();
 
 ?>
@@ -76,21 +86,46 @@ $pendingAccounts = $baccount->getPendingAccountInfo();
         		echo "</ul></div>";
         	}
         ?>
-        	<h3>等待审核的门店信息列表</h3>
-        	<ul class="nav nav-tabs nav-stacked">
-             <?php 
-            if(count($pendingAccounts)>0)
-	            foreach ($pendingAccounts as $pendingAccount){
-	            	echo "<li>".$pendingAccount->user->realname."</li>";
-	            }
-            ?> 
-            <li>&nbsp;&nbsp;&nbsp;&nbsp;</li>
-            <li>&nbsp;&nbsp;&nbsp;&nbsp;</li>
-            <li>&nbsp;&nbsp;&nbsp;&nbsp;</li>
-            <li>&nbsp;&nbsp;&nbsp;&nbsp;</li>
-            <li>&nbsp;&nbsp;&nbsp;&nbsp;</li>
-            <li>&nbsp;&nbsp;&nbsp;&nbsp;</li>
-            </ul>
+        	  <div>
+      <?php $count = count($pendingAccounts);
+      		$k=0;
+        if($count>0){
+        	echo "<div class=\"widget-body\"><table class=\"table table-condensed table-striped table-bordered table-hover no-margin\"><thead><tr>";
+        	echo "<th style=\"width:10%\">账号</th><th style=\"width:10%\" class=\"hidden-phone\">姓名</th>";
+        	echo "<th style=\"width:20%\" class=\"hidden-phone\">地址</th><th style=\"width:20%\" class=\"hidden-phone\">联系方式</th><th style=\"width:30%\" class=\"hidden-phone\">营业执照</th><th style=\"width:10%\" class=\"hidden-phone\">审核操作</th></tr></thead>";
+        	echo "<tbody>";
+        	echo "<br/>等待审核的门店信息列表";
+        	if(isset($result)){
+        		echo "<div class=\"alert alert-block alert-success fade in\">";
+        		echo "<h4 class=\"alert-heading\">";
+        		if($result){
+        			echo "门店审核完成";
+        		}else{
+        			echo "门店审核失败，请联系管理员 admin@wishconsole.com，";
+        		}
+        		echo "</h4>";
+        		echo "</div>";
+        		$result = null;
+        	}
+        	foreach ($pendingAccounts as $pendingAccount){
+        		if ($k % 2 == 0) {
+        			echo "<tr>";
+        		} else {
+        			echo "<tr class=\"gradeA success\">";
+        		}
+        		echo "<td style=\"width:10%;vertical-align:middle;\">".$pendingAccount->name."</td>";
+        		echo "<td style=\"width:10%;vertical-align:middle;\">".$pendingAccount->user->realname."</td>";
+        		echo "<td style=\"width:20%;vertical-align:middle;\">".$pendingAccount->user->address."</td>";
+        		echo "<td style=\"width:20%;vertical-align:middle;\">".$pendingAccount->user->tel." QQ:".$pendingAccount->user->qq."</td>";
+        		echo "<td style=\"width:30%;vertical-align:middle;\"><img src=\"".$pendingAccount->user->businesslicenseurl."\" width=200 height=200 /> </td>";
+        		echo "<td style=\"width:10%;vertical-align:middle;\" class=\"hidden-phone\"><button type=\"button\" onclick=\"approve('".$pendingAccount->id."',1,'".$pendingAccount->name."')\" class=\"btn btn-mini\"><span class=\"label label-info\">通过</span></button><button type=\"button\" onclick=\"approve('".$pendingAccount->id."',0,'".$pendingAccount->name."')\" class=\"btn btn-mini\"><span class=\"label label-error\">不通过</span></button></td>";
+        		echo "</tr>";
+        		$k++;
+        	}
+        	echo "</tbody></table></div>";
+        }
+      ?>
+   </div>
         </div>
 <div class="col-md-1">
         </div>
@@ -108,5 +143,20 @@ $pendingAccounts = $baccount->getPendingAccountInfo();
 <script type="text/javascript" src="./js/jquery-2.2.0.min.js" charset="UTF-8"></script>
 <script type="text/javascript" src="./js/bootstrap.min.js"></script>
 <script type="text/javascript" src="./js/jquery.ajaxfileupload.js"></script>
+<script type="text/javascript">
+function approve(id,flag,name){
+	if(flag == 1){
+		if(confirm("确认审核通过账号"+name)){
+			window.location.href="./pendingaccounts.php?i=" + id + "&f=" + flag;
+			}else{
+			return;}
+	}else{
+		if(confirm("确认拒绝通过账号"+name)){
+		window.location.href="./pendingaccounts.php?i=" + id + "&f=" + flag;
+			}else{
+			return;}
+	}
+}
+</script>
 </body>
 </html>

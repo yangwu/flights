@@ -85,6 +85,11 @@ class DBHelper {
 		return mysql_query($loginSql);
 	}
 	
+	public function updateAccountStatus($accountid,$status){
+		$updateasql = 'update account set status = '.$status.' where id = '.$accountid;
+		return mysql_query($updateasql);
+	}
+	
 	public function addUser($user) {
 		$insertuser = 'INSERT INTO user (accountid,realname,address,qq,tel,businesslicenseurl) ' . 'VALUES(' . $user->accountid . ',"' . mysql_real_escape_string ( $user->realname ) . '","' . mysql_real_escape_string ( $user->address ) . '","' . $user->qq . '","' . $user->tel . '","' . $user->businesslicenseurl . '")';
 		$result = mysql_query ( $insertuser );
@@ -93,7 +98,7 @@ class DBHelper {
 	
 	public function getUsersInfo($type){
 		$usersinfosql = "SELECT * from (SELECT * FROM `account` WHERE type = '".$type."'".
-						" ) a left outer join user on a.id = user.accountid	";
+						" ) a left outer join user on a.id = user.accountid	order by a.createtime";
 		return mysql_query($usersinfosql);
 	}
 	
