@@ -33,7 +33,7 @@ $suppliers = $baccount->getSuppliersInfo();
 	<!-- HEADER -->
 	<div id="header" class="navbar navbar-fixed-top">
 		<div class="container-fluid">
-			<a class="brand" href="https://wishconsole.com/"> <span
+			<a class="brand" href="./index.php"> <span
 				class="merchant-header-text"><?php echo WEBSITETITLE?></span>
 			</a>
 			<div class="pull-right">

@@ -19,6 +19,12 @@ class DBHelper {
 		if (! empty ( $db ))
 			mysql_close ( $db );
 	}
+	
+	public function queryUser($username, $email) {
+		$querySql = 'select id,name,email from account where email = "' . $email . '" or name = "' . $username . '"';
+		return mysql_query ( $querySql );
+	}
+	
 	public function addAccount($account) {
 		$insertsql = 'INSERT INTO account (name,psd,email,createtime,status,type) ' . 'VALUES("' . mysql_real_escape_string ( $account->name ) . '","' . mysql_real_escape_string ( $account->psd ) . '","' . mysql_real_escape_string ( $account->email ) . '","' . date ( 'Ymd' ) . '",' . $account->status . ',' . $account->type . ')';
 		$result = mysql_query ( $insertsql );
@@ -128,5 +134,29 @@ class DBHelper {
 	public function getInventory($productid,$productdate,$countpersons){
 		$getInventory = 'select * from productdate where productid ='.$productid.'  and productdate = "'.$productdate.'"';
 		return mysql_query($getInventory);
+	}
+	
+	public function insertResetToken($userid,$token){
+		$tokensql = "insert into resetpassword(userid,token) values(".$userid.",'".$token."')";
+		return mysql_query ( $tokensql );
+	}
+	
+	public function removeResetToken($userid){
+		$delfirst = "delete from resetpassword where userid = ".$userid;
+		return mysql_query ( $delfirst );
+	}
+	
+	public function queryResetpsdUser($token){
+		$queryToken = "select userid from resetpassword where token = '".$token."'";
+		$result = mysql_query($queryToken);
+		while( $useridarray = mysql_fetch_array ( $result )){
+			return $useridarray['userid'];
+		}
+		return null;
+	}
+	
+	public function updatepsd($userid,$newpassword){
+		$psdupdate = "update account set psd = '".$newpassword."' where id = ".$userid;
+		return mysql_query($psdupdate);
 	}
 }

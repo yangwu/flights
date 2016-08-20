@@ -1,20 +1,20 @@
 <?php 
+include_once dirname ( '__FILE__' ) . '/config.php';
+include_once dirname ( '__FILE__' ) . '/mailHelper.php';
+include_once dirname ( '__FILE__' ) . '/db/DBHelper.php';
 require_once("PHPMailerAutoload.php");
-include_once  dirname ( '__FILE__' ) . './mysql/dbhelper.php';
-include_once  dirname ( '__FILE__' ) . './user/mailHelper.php';
-use mysql\dbhelper;
-use user\mailHelper;
-$dbhelper = new dbhelper();
 $errorMsg = $_GET ['errorMsg'];
 $token = $_GET ['t'];
 $resetType = $_GET['type'];
+
+$dbhelper = new DBHelper();
 if(strcmp("reset",$resetType) == 0){
 	$password = $_POST ["password"];
 	$currentUserid = $_POST ["userid"];
 	$result = $dbhelper->updatepsd ( $currentUserid, md5 ( $password ));
 	$dbhelper->removeResetToken($currentUserid);
 	if($result){
-		header ( "Location:./wlogin.php?errorMsg=重置密码成功,请重新登录" );
+		header ( "Location:./login.php?errorMsg=重置密码成功,请重新登录" );
 		exit();
 	}else{
 		$errorMsg = "对不起，重置密码失败，请重新操作,或者联系管理员admin@wishconsole.com";
@@ -22,8 +22,9 @@ if(strcmp("reset",$resetType) == 0){
 	
 }else if(strcmp("sendmail",$resetType) == 0){
 	$sendAddress = $_POST['email'];
-	$mailHelper = new mailHelper();	
+	$mailHelper = new mailHelper();
 	$sendResultl = $mailHelper->sendMailResetPsd($sendAddress);
+	echo "sendResult:".$sendResultl;
 	if($sendResultl){
 		$errorMsg = '发送邮件成功，请查收邮件，重置密码';
 	}else{
@@ -43,10 +44,10 @@ if($token != null){
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-			<title>Wish管理助手-更有效率的Wish商户实用工具</title>
+			<title><?php echo WEBSITETITLE?></title>
 			<meta name="keywords" content="">
 				<link rel="stylesheet" type="text/css"
-					href="../css/new_signup_page.css">
+					href="./css/new_signup_page.css">
 
 </head>
 <script type="text/javascript">
@@ -83,7 +84,7 @@ if($token != null){
 			return;
 		} 
 		var registerform = document.getElementById("resetform");
-		resetform.action = "wreset.php?type=reset";
+		resetform.action = "reset.php?type=reset";
 		resetform.submit();
 	}
 </script>
@@ -91,8 +92,8 @@ if($token != null){
 	<!-- HEADER -->
 	<div id="header" class="navbar navbar-fixed-top">
 		<div class="container-fluid">
-			<a class="brand" href="https://wishconsole.com/"> <span
-				class="merchant-header-text">Wish管理助手-更有效率的Wish商户实用工具</span>
+			<a class="brand" href="./index.php"> <span
+				class="merchant-header-text"><?php echo WEBSITETITLE?></span>
 			</a>
 
 		</div>
@@ -108,7 +109,7 @@ if($token != null){
 				<div class="signup-page-title">重置密码</div>
 				<div class="signup-page-content">
 					<form class="form form-horizontal" id="resetform" method="post"
-						action="wreset.php?type=sendmail">
+						action="reset.php?type=sendmail">
 						<?php if($errorMsg != null)
 							echo "<ul align=\"center\">".$errorMsg."</ul>";
 						if($token != null && $userid != null){

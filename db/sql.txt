@@ -77,3 +77,9 @@ CREATE TABLE `purchaseinfo`(
   `createtime` varchar(20) DEFAULT NULL,
   PRIMARY KEY(`id`)
 ) DEFAULT CHARSET=utf8;
+
+CREATE TABLE `resetpassword`(
+	`userid` int(11) NOT NULL,
+	`token`  varchar(50) NOT NULL,
+	PRIMARY KEY (`userid`)
+)  DEFAULT CHARSET=utf8;
