@@ -53,8 +53,9 @@ $lines = $bline->getAllLines();
 	<!-- END HEADER -->
 	<!-- SUB HEADER NAV-->
 	<!-- splash page subheader-->
-
-        <div class="widget">
+<div class="col-md-1">
+        </div>
+        <div class="col-md-10">
         <?php 
         	if(strcmp($type,TYPE_SUPPLIER) == 0 || strcmp($type,TYPE_HEADQUARTER) == 0){
         		echo "<div class=\"pull-right\">";
@@ -90,7 +91,8 @@ $lines = $bline->getAllLines();
             <li>&nbsp;&nbsp;&nbsp;&nbsp;</li>
             </ul>
         </div>
-
+<div class="col-md-1">
+        </div>
 	<!-- FOOTER -->
 	<div id="footer" class="navbar navbar-fixed-bottom" style="left: 0px;">
 		<div class="navbar-inner">

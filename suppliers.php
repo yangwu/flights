@@ -53,7 +53,8 @@ $suppliers = $baccount->getSuppliersInfo();
 	<!-- END HEADER -->
 	<!-- SUB HEADER NAV-->
 	<!-- splash page subheader-->
-
+<div class="col-md-1">
+        </div>
         <div class="col-md-10">
         <?php 
         	if(strcmp($type,TYPE_SUPPLIER) == 0 || strcmp($type,TYPE_HEADQUARTER) == 0){
@@ -63,13 +64,13 @@ $suppliers = $baccount->getSuppliersInfo();
         		echo "<li class=\"dropdown\">";
         		echo "<a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">&nbsp;&nbsp;管&nbsp;&nbsp;理&nbsp;&nbsp; <b class=\"caret\"></b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>";
         		echo "<ul class=\"dropdown-menu\">";
-        		echo "<li><a href=\"./index.php\">发布产品</a></li>";
+        		echo "<li><a href=\"./addproduct.php\">发布产品</a></li>";
         		echo "<li><a href=\"./index.php\">发布促销信息</a></li>";
 				if(strcmp($type,TYPE_HEADQUARTER) == 0){
-					echo "<li><a href=\"./index.php\">审核门店信息</a></li>";
-					echo "<li><a href=\"./index.php\">添加专线</a></li>";
-					echo "<li><a href=\"./addsupplier.php\">添加批发商</a></li>";
-				}        		
+					echo "<li><a href=\"./pendingaccounts.php\">审核门店信息</a></li>";
+					echo "<li><a href=\"./lines.php\">专线管理</a></li>";
+					echo "<li><a href=\"./suppliers.php\">批发商管理</a></li>";
+				}          		
         		echo "</li>";
         		echo "</ul></div>";
         	}
@@ -84,7 +85,8 @@ $suppliers = $baccount->getSuppliersInfo();
             ?> 
             </ul>
         </div>
-
+<div class="col-md-1">
+        </div>
 	<!-- FOOTER -->
 	<div id="footer" class="navbar navbar-fixed-bottom" style="left: 0px;">
 		<div class="navbar-inner">
