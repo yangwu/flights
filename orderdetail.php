@@ -109,9 +109,9 @@ if(!$bp->isInventoryAvailable($productid, $pdate, $adultcount+$childcount)){
 							echo "</div></div>";
 								
 							echo "<div class=\"control-group\">";
-							echo "<label class=\"control-label\" for=\"title\"><font color=\"#F00\">* </font>出生日期</label>";
+							echo "<label class=\"control-label\" for=\"title\">出生日期</label>";
 							echo "<div class=\"controls input-append\">";
-							echo "<input class=\"input-block-level\" type=\"text\" value=\"1980-01-01\" name=\"adatetimepickerb".$a."\" id=\"adatetimepickerb".$a."\" data-date-format=\"yyyy-mm-dd\" placeholder=\"出生日期,可接受：2015-12-25\">";
+							echo "<input class=\"input-block-level\" type=\"text\" value=\"\" name=\"adatetimepickerb".$a."\" id=\"adatetimepickerb".$a."\" data-date-format=\"yyyy-mm-dd\" placeholder=\"出生日期,可接受：2015-12-25\">";
 							echo "</div></div>";
 							
 							echo "<div class=\"control-group\">";
@@ -131,9 +131,9 @@ if(!$bp->isInventoryAvailable($productid, $pdate, $adultcount+$childcount)){
 							echo "</div></div>";
 							
 							echo "<div class=\"control-group\">";
-							echo "<label class=\"control-label\" for=\"title\"><font color=\"#F00\">* </font>证件有效期</label>";
+							echo "<label class=\"control-label\" for=\"title\">证件有效期</label>";
 							echo "<div class=\"controls input-append\">";
-							echo "<input class=\"input-block-level\" type=\"text\" value=\"2016-12-20\" name=\"adatetimepickerv".$a."\" id=\"adatetimepickerv".$a."\" data-date-format=\"yyyy-mm-dd\" placeholder=\"证件有效日期,可接受：2015-12-25\">";
+							echo "<input class=\"input-block-level\" type=\"text\" value=\"\" name=\"adatetimepickerv".$a."\" id=\"adatetimepickerv".$a."\" data-date-format=\"yyyy-mm-dd\" placeholder=\"证件有效日期,可接受：2015-12-25\">";
 							echo "</div></div><br/>";
 							
 						}

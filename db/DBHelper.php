@@ -186,6 +186,11 @@ class DBHelper {
 		return mysql_query($ordersql);
 	}
 	
+	public function getProductOwnerId($productid){
+		$osql = 'select line.accountid from line, product where line.id = product.lineid and product.id = '.$productid;
+		return mysql_query($osql);
+	}
+	
 	public function getInventory($productid,$productdate,$countpersons){
 		$getInventory = 'select * from productdate where productid ='.$productid.'  and productdate = "'.$productdate.'"';
 		return mysql_query($getInventory);

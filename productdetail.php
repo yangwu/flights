@@ -7,6 +7,7 @@ header ( "Content-Type: text/html;charset=utf-8" );
 session_start ();
 $currentusername =$_SESSION ['username'];
 $type = $_SESSION['type'];
+$accountid = $_SESSION['id'];
 session_commit();
 
 if ($currentusername == null) { // 未登录
@@ -16,12 +17,21 @@ if ($currentusername == null) { // 未登录
 
 
 $pid = $_GET['id'];
+$showOrders = false;
 if(isset($pid)){
 	$bp = new BProduct();
 	$product = $bp->getProductById($pid);
 	$productdates = $product->productdates;
-	
 	$orders = $bp->getorders($pid);
+	
+	if(strcmp($type,TYPE_HEADQUARTER) == 0){
+		$showOrders = true;
+	}else if(strcmp($type,TYPE_SUPPLIER) == 0){
+		$ownerid = $bp->getProductOwnerId($pid);
+		if(strcmp($ownerid,$accountid) == 0){
+			$showOrders = true;
+		}
+	}
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -117,7 +127,9 @@ if(isset($pid)){
          产品描述
       </a>
    </li>
-   <li><a href="#orders" data-toggle="tab">购买记录</a></li>
+   <?php if($showOrders){
+   	echo "<li><a href=\"#orders\" data-toggle=\"tab\">购买记录</a></li>";
+   }?>
 </ul>
 <div id="myTabContent" class="tab-content">
    <div class="tab-pane fade in active" id="desc">

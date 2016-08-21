@@ -93,6 +93,15 @@ class BProduct {
 		return false;
 	}
 	
+	public function getProductOwnerId($productid){
+		$result = $this->dbhelper->getProductOwnerId($productid);
+		if($result){
+			if($temp = mysql_fetch_array($result))
+				return $temp['accountid'];
+		}
+		return null;
+	}
+	
 	public function getorders($productid){
 		$orders = array();
 		$result = $this->dbhelper->getorders($productid);
