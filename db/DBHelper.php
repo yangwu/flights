@@ -136,6 +136,11 @@ class DBHelper {
 		return mysql_query($lineproductsql);
 	}
 	
+	public function getLineContactInfo($lineid){
+		$clinesql = 'select user.tel,user.qq from user,line where user.accountid = line.accountid and line.id = '.$lineid;
+		return mysql_query($clinesql);
+	}
+	
 	public function getProduct($id){
 		$productsql = 'select * from product where id='.$id;
 		return mysql_query($productsql);

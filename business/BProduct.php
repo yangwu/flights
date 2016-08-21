@@ -45,6 +45,16 @@ class BProduct {
 		return $products;
 	}
 	
+	public function getLineContactInfo($lineid){
+		$result = $this->dbhelper->getLineContactInfo($lineid);
+		if($result){
+			if($contactinfo = mysql_fetch_array($result)){
+				return $contactinfo;
+			}	
+		}
+		return null;
+	}
+	
 	public function getProductById($pid){
 		$product = new Product();
 		$presult = $this->dbhelper->getProduct($pid);

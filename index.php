@@ -25,6 +25,7 @@ if(count($lines)>0){
 $bproduct = new BProduct();
 if(isset($activelineid)){
 	$products = $bproduct->getLinePrducts($activelineid);
+	$contactinfo = $bproduct->getLineContactInfo($activelineid);
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -113,7 +114,15 @@ if(isset($activelineid)){
             <div class="widget">
             	<div class="widget-header">
                     <div class="title">
-                      	<?php echo $activelinename;?>
+                      	<?php echo $activelinename;
+                      		if(isset($contactinfo) && $contactinfo != null){
+                      			$linetel = $contactinfo['tel'];
+                      			$lineqq = $contactinfo['qq'];
+                      			echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"tencent://message/?uin=".$lineqq."&Site=l.com&Menu=yes\"><img border=\"5\" src=\"http://wpa.qq.com/pa?p=1:".$lineqq.":3\" alt=\"QQ联系\"/></a>";
+                      			echo "&nbsp;&nbsp;&nbsp;&nbsp;联系电话:".$linetel;
+                      		}
+                      	?>
+                      	
                     </div>
                   </div>
                   <div class="widget-body">
