@@ -26,7 +26,7 @@ class DBHelper {
 	}
 	
 	public function addAccount($account) {
-		$insertsql = 'INSERT INTO account (name,psd,email,createtime,status,type) ' . 'VALUES("' . mysql_real_escape_string ( $account->name ) . '","' . mysql_real_escape_string ( $account->psd ) . '","' . mysql_real_escape_string ( $account->email ) . '","' . date ( 'Ymd' ) . '",' . $account->status . ',' . $account->type . ')';
+		$insertsql = 'INSERT INTO account (name,psd,email,createtime,status,type) ' . 'VALUES("' . mysql_real_escape_string ( $account->name ) . '","' . mysql_real_escape_string ( $account->psd ) . '","' . mysql_real_escape_string ( $account->email ) . '","' . date('Ymd H:i:s') . '",' . $account->status . ',' . $account->type . ')';
 		$result = mysql_query ( $insertsql );
 		return mysql_insert_id ();
 	}
@@ -34,7 +34,7 @@ class DBHelper {
 	public function addAccountInfo($account,$user,$lines){
 		$result = true;
 		
-		$insertAccountsql = 'INSERT INTO account (name,psd,email,createtime,status,type) ' . 'VALUES("' . mysql_real_escape_string ( $account->name ) . '","' . mysql_real_escape_string ( $account->psd ) . '","' . mysql_real_escape_string ( $account->email ) . '","' . date ( 'Ymd' ) . '",' . $account->status . ',' . $account->type . ')';
+		$insertAccountsql = 'INSERT INTO account (name,psd,email,createtime,status,type) ' . 'VALUES("' . mysql_real_escape_string ( $account->name ) . '","' . mysql_real_escape_string ( $account->psd ) . '","' . mysql_real_escape_string ( $account->email ) . '","' . date('Ymd H:i:s') . '",' . $account->status . ',' . $account->type . ')';
 		
 		mysql_query("BEGIN");
 	
@@ -103,9 +103,14 @@ class DBHelper {
 	}
 	
 	public function addLine($line) {
-		$insertline = 'INSERT INTO line (accountid,name,createtime) ' . 'VALUES(' . $line->accountid . ',"' . mysql_real_escape_string ( $line->name ) . '","' . date ( 'Ymd' ) . '")';
+		$insertline = 'INSERT INTO line (accountid,name,createtime) ' . 'VALUES(' . $line->accountid . ',"' . mysql_real_escape_string ( $line->name ) . '","' . date('Ymd H:i:s') . '")';
 		$result = mysql_query ( $insertline );
 		return mysql_insert_id ();
+	}
+	
+	public function getLineById($lineid){
+		$linesql = 'select * from line where id='.$lineid;
+		return mysql_query($linesql);
 	}
 	public function updateLineAccount($line) {
 		$updateline = 'UPDATE line set accountid = ' . $line->accountid . ' where id = ' . $line->id;
@@ -126,9 +131,14 @@ class DBHelper {
 	} 
 
 	public function addProduct($product) {
-		$insertproduct = 'INSERT INTO product (lineid,title,description,price,childprice,photourl,promotephotourl,createtime) ' . 'VALUES(' . $product->lineid . ',"' . mysql_real_escape_string ( $product->title ) . '","' . mysql_real_escape_string ( $product->description ) . '","' . $product->price . '","' . $product->childprice . '","' . $product->photourl . '","' . $product->promotephotourl . '","' . date ( 'Ymd' ) . '")';
+		$insertproduct = 'INSERT INTO product (lineid,title,description,price,childprice,photourl,promotephotourl,createtime) ' . 'VALUES(' . $product->lineid . ',"' . mysql_real_escape_string ( $product->title ) . '","' . mysql_real_escape_string ( $product->description ) . '","' . $product->price . '","' . $product->childprice . '","' . $product->photourl . '","' . $product->promotephotourl . '","' . date('Ymd H:i:s') . '")';
 		$result = mysql_query ( $insertproduct );
 		return mysql_insert_id ();
+	}
+	
+	public function delProduct($productid){
+		$delsql = 'delete from product where id = '.$productid;
+		return mysql_query($delsql);
 	}
 	
 	public function getLineProducts($lineid){
@@ -218,5 +228,11 @@ class DBHelper {
 	public function updatepsd($userid,$newpassword){
 		$psdupdate = "update account set psd = '".$newpassword."' where id = ".$userid;
 		return mysql_query($psdupdate);
+	}
+	
+	public function addlog($actionlog) {
+		$addlogsql = 'insert into actionlog(accountid,action,description,createtime) values('.$actionlog->accountid.',"'.$actionlog->action.'","'.$actionlog->description.'","'.date('Ymd H:i:s').'")';
+		mysql_query($addlogsql);
+		return mysql_insert_id ();
 	}
 }

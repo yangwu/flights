@@ -12,6 +12,7 @@ if ($username == null) { // 未登录
 	header ( "Location:./login.php?errorMsg=您尚未登录" );
 	exit ();
 }
+$bproduct = new BProduct();
 
 $activelineid = $_GET['lineid'];
 
@@ -22,10 +23,20 @@ if(count($lines)>0){
 		$activelineid = $lines[0]->id;	
 }
 
-$bproduct = new BProduct();
+
 if(isset($activelineid)){
 	$products = $bproduct->getLinePrducts($activelineid);
 	$contactinfo = $bproduct->getLineContactInfo($activelineid);
+}
+
+$updatable = false;
+if(strcmp($type,TYPE_HEADQUARTER) == 0){
+	$updatable = true;
+}else if(strcmp($type,TYPE_SUPPLIER) == 0){
+	$activeline = $bline->getLineById($activelineid);
+	if(strcmp($activeline->accountid,$accountid) == 0){
+		$updatable = true;
+	}
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -127,7 +138,7 @@ if(isset($activelineid)){
                   </div>
                   <div class="widget-body">
                   <?php 
-                  if(count($products)>0)
+                  if(count($products)>0){
                   	foreach ($products as $product){
                   		echo "<table class=\"table table-condensed table-hover no-margin\">";
                   		echo "<tbody>";
@@ -136,16 +147,33 @@ if(isset($activelineid)){
                   		echo "<img src=\"".$product->photourl."\" width=200 height=200/>";
                   		echo "</td>";
                   		echo "<td width=50%>";
+                  		echo "<ul><li>";
                   		echo "<span  class=\"label label label-info\">";
                   		echo "<a target=\"_blank\" href=\"./productdetail.php?id=".$product->id."\">".$product->title."</a>";
                   		echo "</span>";
-                  		echo "</td>";
-                  		echo "<td width=20%>";
+                  		echo "</li><br/><li>";
                   		echo "<span  class=\"label label label-info\">";
-                  		echo "成人票价:".$product->price."元.&nbsp;&nbsp;&nbsp;&nbsp; 儿童票价".$product->childprice."元";
+                  		echo "成人票价:".$product->price."元";
                   		echo "</span>";
+                  		echo "</li>";
+                  		echo "<li>";
+                  		echo "<span  class=\"label label label-info\">";
+                  		echo "儿童票价:".$product->childprice."元";
+                  		echo "</span>";
+                  		echo "</li></ul>";
+                  		echo "</td>";
+                  		echo "<td width=20% valign=\"bottom\">";
+                  		if($updatable){
+                  			echo " <a href=\"./updateproduct.php?pid=".$product->id ."&lid=".$activelineid."\">修改</a>";
+                  		}else{
+                  			echo "";
+                  		}
+                  		
                   		echo "</td></tr></tbody></table>";
                  	}
+                  }else{
+                  	echo "<h4>该专线下目前无产品</h4>";
+                  }
                   ?>
                   </div>
                 </div>
@@ -168,11 +196,6 @@ if(isset($activelineid)){
 <script type="text/javascript" src="./js/bootstrap.min.js"></script>
 <script type="text/javascript" src="./js/jquery.ajaxfileupload.js"></script>
 <script type="text/javascript">
-	$(document).ready(function(){
-	    $('#officelicense').bind('input propertychange',function(){
-	    	licenseChange();
-	    });
-	});
 </script>					
 </body>
 </html>

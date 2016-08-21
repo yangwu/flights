@@ -83,3 +83,12 @@ CREATE TABLE `resetpassword`(
 	`token`  varchar(50) NOT NULL,
 	PRIMARY KEY (`userid`)
 )  DEFAULT CHARSET=utf8;
+
+CREATE TABLE `actionlog`(
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+	`accountid` int(11) NOT NULL,
+	`action`  varchar(20),
+	`description` varchar(1000),
+	`createtime` varchar(20) DEFAULT NULL,
+	PRIMARY KEY(`id`)
+)  DEFAULT CHARSET=utf8;

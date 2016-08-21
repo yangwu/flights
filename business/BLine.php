@@ -21,6 +21,20 @@ class BLine {
 		return false;
 	}
 	
+	public function getLineById($lineid){
+		$result = $this->dbhelper->getLineById($lineid);
+		if($result){
+			if($temp = mysql_fetch_array($result)){
+				$line = new Line();
+				$line->id = $temp['id'];
+				$line->accountid = $temp['accountid'];
+				$line->name = $temp['name'];
+				$line->createtime = $temp['createtime'];
+				return $line;
+			}
+		}
+		return null;
+	}
 	public function getAllLines(){
 		$result = $this->dbhelper->getAllLines();
 		$lines = array();

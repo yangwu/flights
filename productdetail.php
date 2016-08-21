@@ -33,6 +33,7 @@ if(isset($pid)){
 		}
 	}
 }
+$today = date("Y-m-d");
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -99,8 +100,12 @@ if(isset($pid)){
 							 if($count>0){
 							 	for($i=0;$i<$count;$i++){
 							 		$tempdate = $productdates[$i];
-							 		echo "<li>".$tempdate->productdate."</li>";
-							 		echo "<option value=\"".$tempdate->productdate."\">".$tempdate->productdate."(剩余票数:".$tempdate->inventory.")"."</option>";
+							 		if(strtotime($today)>strtotime($tempdate)){
+							 			echo "<optgroup label=\"".$tempdate->productdate."(剩余票数:".$tempdate->inventory.")\"></optgroup>";
+							 		}else{
+							 			echo "<option value=\"".$tempdate->productdate."\">".$tempdate->productdate."(剩余票数:".$tempdate->inventory.")"."</option>";
+							 		}
+							 		
 							 	}
 							 }
 							 echo "</select>";

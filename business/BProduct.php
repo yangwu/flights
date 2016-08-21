@@ -22,6 +22,10 @@ class BProduct {
 		
 		return $productid;
 	}
+	public function delProduct($productid){
+		
+	}
+	
 	public function addProductDate($productdate) {
 		$result = $this->dbhelper->addProductDate ( $productdate );
 		if ($result)
