@@ -47,6 +47,16 @@ if(strcmp ( $command, "addproduct" ) == 0){
 	$totalticket = $_POST['totalticket'];
 	$description = $_POST['editor'];
 	
+	$mapdates = array();
+	foreach ( $_POST as $key => $value ) {
+		if (preg_match ( "/^dateticket/", $key )) {
+			$choosedate = explode ( "_", $key )[1];
+			echo "<br/>choosed:".$choosedate.",value:".$value;
+			$mapdates[$choosedate] = $value;
+		}
+	}
+	
+	
 	$bproduct = new BProduct();
 	$product = new Product();
 	$product->childprice = $childprice;
@@ -61,8 +71,8 @@ if(strcmp ( $command, "addproduct" ) == 0){
 	for($i=0;$i<$datecount;$i++){
 		$curproductdate = new ProductDate();
 		$curproductdate->productdate = $availabledates[$i];
-		$curproductdate->total = $totalticket;
-		$curproductdate->inventory = $totalticket;
+		$curproductdate->total = $mapdates[$availabledates[$i]];
+		$curproductdate->inventory = $mapdates[$availabledates[$i]];
 		$productdates[] = $curproductdate;
 	}
 	
@@ -193,6 +203,16 @@ function getWeekofDate($curdate){
 							
 							</div>
 						</div>
+						
+						<div class="control-group">
+							<label class="control-label" for="officetel"><font color="#F00">* </font>机票总数</label>
+							<div class="controls input-append">
+								<input type="text" id="totalticket" name="totalticket" class="input-block-level" value="<?php echo $totalticket?>"
+									placeholder="每天可售机票总数"> <span class="add-on"><i
+										class="icon-pencil"></i></span>
+							
+							</div>
+						</div>
 						<div class="control-group">
 							<label class="control-label" for="availabledate"><font color="#F00">* </font>出行日期</label>
 							<div id="choosedate" class="controls input-append">
@@ -202,19 +222,11 @@ function getWeekofDate($curdate){
 								echo "<label class=\"checkbox\">";
 								echo "<input id=\"availabledate\" name=\"availabledate[]\" type=\"checkbox\" value=\"".$dates[$i]."\">";
 								echo $dates[$i]."&nbsp;&nbsp;".getWeekofDate($dates[$i]);
+								echo "&nbsp;&nbsp;&nbsp;&nbsp;机票总数:";
+								echo "<input type=\"text\" id=\"dateticket_".$dates[$i]."\"  name=\"dateticket_".$dates[$i]."\"  class=\"input-block-level\" value=\"\" placeholder=\"每天可售机票总数\">";
 								echo "</label>";
 							}
 							?>
-							
-							</div>
-						</div>
-						
-						<div class="control-group">
-							<label class="control-label" for="officetel"><font color="#F00">* </font>每天可售机票总数</label>
-							<div class="controls input-append">
-								<input type="text" id="totalticket" name="totalticket" class="input-block-level" value="<?php echo $totalticket?>"
-									placeholder="每天可售机票总数"> <span class="add-on"><i
-										class="icon-pencil"></i></span>
 							
 							</div>
 						</div>
@@ -382,12 +394,22 @@ function getWeekofDate($curdate){
 	    }
 	}
 
+	function setticketsvalue(ticketvalue){
+		var a=$('input[id^="dateticket"]').map(function(){return {value:this.value,id:this.id}}).get();
+		for(var i=0;i<a.length;i++){
+			$('#'+ a[i].id).val(ticketvalue);
+		}
+	}
+
 	$(document).ready(function(){
 
 	    $('#productthumb').bind('input propertychange',function(){
 	    	thumbChange();
 	    });
 
+	    $('#totalticket').bind('input propertychange',function(){
+	    	setticketsvalue(this.value);
+		});
 
 	   $("#product_image").AjaxFileUpload({
 			onComplete: function(filename, response) {
