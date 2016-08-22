@@ -21,26 +21,10 @@ if ($currentusername == null) { // 未登录
 	exit ();
 }
 $bproduct = new BProduct();
-$productid = $_GET['pid'];
-$lineid = $_GET['lid'];
-$currentProduct = $bproduct->getProductById($productid);
-
-$bline = new BLine();
-$lines = $bline->getAllLines();
-
-$dates = array();
-$firstDate = date('Y-m-d');
-$dates[0] = $firstDate;
-$tempDate = $firstDate;
-for($k=1;$k<30;$k++){
-	$nextDate = getNextDate($tempDate);
-	$dates[$k] = $nextDate;
-	$tempDate = $nextDate;
-}
 
 $command = $_GET['command'];
 $msg = null;
-if(strcmp ( $command, "addproduct" ) == 0){
+if(strcmp ( $command, "update" ) == 0){
 	
 	$title = $_POST['title'];
 	$thumburl = $_POST['productthumb'];
@@ -51,7 +35,20 @@ if(strcmp ( $command, "addproduct" ) == 0){
 	$totalticket = $_POST['totalticket'];
 	$description = $_POST['editor'];
 	
+	$productid = $_POST['productid'];
+	
+	$mapdates = array();
+	foreach ( $_POST as $key => $value ) {
+		if (preg_match ( "/^dateticket/", $key )) {
+			$choosedate = explode ( "_", $key )[1];
+			echo "<br/>choosed:".$choosedate.",value:".$value;
+			$mapdates[$choosedate] = $value;
+		}
+	}
+	
 	$product = new Product();
+	$product->id = $productid;
+	
 	$product->childprice = $childprice;
 	$product->description = $description;
 	$product->lineid = $line;
@@ -63,19 +60,38 @@ if(strcmp ( $command, "addproduct" ) == 0){
 	$productdates = array();
 	for($i=0;$i<$datecount;$i++){
 		$curproductdate = new ProductDate();
+		$curproductdate->productid = $productid;
 		$curproductdate->productdate = $availabledates[$i];
-		$curproductdate->total = $totalticket;
-		$curproductdate->inventory = $totalticket;
+		$curproductdate->total = $mapdates[$availabledates[$i]];
+		$curproductdate->inventory = $mapdates[$availabledates[$i]];
 		$productdates[] = $curproductdate;
 	}
 	
 	$product->productdates = $productdates;
 	
-	$newproduct = $bproduct->addProduct($product);
-	if($newproduct>0){
-		$msg = "添加产品成功";
+	$result = $bproduct->updateProduct($product);
+	if($result>0){
+		$msg = "修改产品成功";
+		header ( "Location:./productdetail.php?id=".$productid );
 	}else{
-		$msg = "添加产品失败";
+		$msg = "修改产品失败";
+	}
+}else{
+	$productid = $_GET['pid'];
+	$lineid = $_GET['lid'];
+	$currentProduct = $bproduct->getProductById($productid);
+	
+	$bline = new BLine();
+	$lines = $bline->getAllLines();
+	
+	$dates = array();
+	$firstDate = date('Y-m-d');
+	$dates[0] = $firstDate;
+	$tempDate = $firstDate;
+	for($k=1;$k<30;$k++){
+		$nextDate = getNextDate($tempDate);
+		$dates[$k] = $nextDate;
+		$tempDate = $nextDate;
 	}
 }
 
@@ -133,7 +149,9 @@ function getWeekofDate($curdate){
 				<div class="signup-page-title">修改产品信息</div>
 				<div class="signup-page-content">
 					<form class="form form-horizontal" id="registerform" method="post"
-						action="addproduct.php?command=addproduct">
+						action="updateproduct.php?command=update">
+						<input type="hidden" id="productid" name="productid" value="<?php echo $productid?>"/>
+						<input type="hidden" id="lineid" name="lineid" value="<?php echo $lineid?>"/>
 						<?php if($msg != null)
 							echo "<ul align=\"center\"  style=\"color:#F00\">".$msg."</ul>";?>
 						<div class="control-group">
@@ -203,20 +221,25 @@ function getWeekofDate($curdate){
 							<?php 
 							$productdates = $currentProduct->productdates;
 							foreach ($productdates as $currentdate){
+								if(strtotime($firstDate)<=strtotime($currentdate->productdate))
+									break;
 								echo "<label class=\"checkbox\">";
 								echo "<input id=\"availabledate\" name=\"availabledate[]\" type=\"checkbox\" checked ".((strtotime($firstDate)>strtotime($currentdate->productdate))?" disabled ":"")." value=\"".$currentdate->productdate."\">";
 								echo $currentdate->productdate."&nbsp;&nbsp;".getWeekofDate($currentdate->productdate);
-								echo "&nbsp;&nbsp;&nbsp;&nbsp;剩余机票数:".$currentdate->inventory;
-								echo "<input type=\"text\" id=\"totalticket\" ".((strtotime($firstDate)>strtotime($currentdate->productdate))?"disabled":"")." name=\"totalticket\" class=\"input-block-level\" value=\"".$currentdate->inventory."\" placeholder=\"每天可售机票总数\">";
+								echo "&nbsp;&nbsp;&nbsp;&nbsp;剩余机票数:";
+								echo "<input type=\"text\" id=\"dateticket_".$currentdate->productdate."\"  name=\"dateticket_".$currentdate->productdate."\"  disabled class=\"input-block-level\" value=\"".$currentdate->inventory."\" placeholder=\"每天可售机票总数\">";
 								echo "</label>";
 							}
 							
-							
+							$productdatesvaluesmap = $currentProduct->productdatesvaluesmap;
 							$count = count($dates);
 							for($i=0;$i<$count;$i++){
 								echo "<label class=\"checkbox\">";
-								echo "<input id=\"availabledate\" name=\"availabledate[]\" type=\"checkbox\" value=\"".$dates[$i]."\">";
+								$inventory = $productdatesvaluesmap[$dates[$i]];
+								echo "<input id=\"availabledate\" name=\"availabledate[]\" type=\"checkbox\" ".($inventory>0?"checked":"")." value=\"".$dates[$i]."\">";
 								echo $dates[$i]."&nbsp;&nbsp;".getWeekofDate($dates[$i]);
+								echo "&nbsp;&nbsp;&nbsp;&nbsp;剩余机票数:";
+								echo "<input type=\"text\" id=\"dateticket_".$dates[$i]."\"  name=\"dateticket_".$dates[$i]."\"  class=\"input-block-level\" value=\"".$inventory."\" placeholder=\"每天可售机票总数\">";
 								echo "</label>";
 							}
 							
@@ -465,16 +488,17 @@ function getWeekofDate($curdate){
 				return;
 			} 
 
-			var totalticket = $('#totalticket').val();
-			if($.trim(totalticket).length<1){
-				alert("机票总数不可为空");
-				return;
-			}  
-			if(isNaN(totalticket)){
-				alert("机票总数只能是数字");
-				return;
-			} 
-				
+
+			var a=$('input[name^="dateticket"]').map(function(){return {value:this.value,name:this.name}}).get();
+			for(var i=0;i<a.length;i++){
+				if(a[i].value != null && a[i].value != ""){
+					if(isNaN(a[i].value)){
+						alert("机票数只能是数字");
+						return;
+					} 
+				}
+			}
+
 			var description = UE.getEditor('editor').getContent();
 			if($.trim(description).length<1){
 				alert("行程描述不可为空");

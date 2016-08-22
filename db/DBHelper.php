@@ -131,14 +131,16 @@ class DBHelper {
 	} 
 
 	public function addProduct($product) {
-		$insertproduct = 'INSERT INTO product (lineid,title,description,price,childprice,photourl,promotephotourl,createtime) ' . 'VALUES(' . $product->lineid . ',"' . mysql_real_escape_string ( $product->title ) . '","' . mysql_real_escape_string ( $product->description ) . '","' . $product->price . '","' . $product->childprice . '","' . $product->photourl . '","' . $product->promotephotourl . '","' . date('Ymd H:i:s') . '")';
+		$insertproduct = 'INSERT INTO product (lineid,title,description,price,childprice,photourl,promotephotourl,createtime) ' . 'VALUES(' . $product->lineid . ',"' . mysql_real_escape_string ( $product->title ) . '","' . mysql_real_escape_string ( $product->description ) . '","' . $product->price . '","' . $product->childprice . '","' . mysql_real_escape_string($product->photourl) . '","' . mysql_real_escape_string($product->promotephotourl) . '","' . date('Ymd H:i:s') . '")';
 		$result = mysql_query ( $insertproduct );
 		return mysql_insert_id ();
 	}
 	
-	public function delProduct($productid){
-		$delsql = 'delete from product where id = '.$productid;
-		return mysql_query($delsql);
+	public function updateProduct($product){
+		$updateproduct = 'update product set lineid = '.$product->lineid.', title = "'.mysql_real_escape_string ( $product->title ).'", description = "'.mysql_real_escape_string ( $product->description ).'",price ='.
+							$product->price.',childprice = '.$product->childprice.',photourl="'.mysql_real_escape_string($product->photourl).'",promotephotourl="'.mysql_real_escape_string($product->promotephotourl).'",createtime="'.date('Ymd H:i:s').'" where id='.$product->id;
+		echo "<br/>updatesql:".$updateproduct;
+		return mysql_query($updateproduct);
 	}
 	
 	public function getLineProducts($lineid){
@@ -158,7 +160,13 @@ class DBHelper {
 	
 	public function addProductDate($productdate) {
 		$insertproductdate = 'INSERT INTO productdate (productid,productdate,inventory,total) ' . 'VALUES(' . $productdate->productid . ',"' . $productdate->productdate . '",' . $productdate->inventory . ',' . $productdate->total . ')';
+		echo "<br/>insertproductdate:".$insertproductdate;
 		return mysql_query ( $insertproductdate );
+	}
+	
+	public function delProductDate($productid){
+		$delsql = 'DELETE from productdate where productid = '.$productid;
+		return mysql_query($delsql);
 	}
 	
 	public function purchaseProductDate($productid,$productdate){

@@ -26,6 +26,20 @@ class BProduct {
 		
 	}
 	
+	public function updateProduct($product){
+		$updateresult = $this->dbhelper->updateProduct($product);
+		
+		$this->dbhelper->delProductDate($product->id);
+		$productdates = $product->productdates;
+		$count = count($productdates);
+		for($i=0;$i<$count;$i++){
+			$tempdate = $productdates[$i];
+			echo "<br/>tempdate:".$tempdate->productdate;
+			$this->addProductDate($productdates[$i]);
+		}
+		return $updateresult;
+	}
+	
 	public function addProductDate($productdate) {
 		$result = $this->dbhelper->addProductDate ( $productdate );
 		if ($result)
@@ -73,6 +87,7 @@ class BProduct {
 		
 		$pdates = $this->dbhelper->getProductDate($pid);
 		$dates = array();
+		$datesvaluesmap = array();
 		while ($tempdate = mysql_fetch_array($pdates)){
 			$productDate = new ProductDate();
 			$productDate->productdate = $tempdate['productdate'];
@@ -80,9 +95,13 @@ class BProduct {
 			$productDate->inventory = $tempdate['inventory'];
 			$productDate->total = $tempdate['total'];
 			$dates[] = $productDate;
+			$datesvaluesmap[$tempdate['productdate']] = $tempdate['inventory']; 
 		}
 		
 		$product->productdates = $dates;
+		$product->productdatesvaluesmap = $datesvaluesmap;
+		
+		
 		return $product;
 	}
 	

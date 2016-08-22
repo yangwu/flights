@@ -100,7 +100,7 @@ $today = date("Y-m-d");
 							 if($count>0){
 							 	for($i=0;$i<$count;$i++){
 							 		$tempdate = $productdates[$i];
-							 		if(strtotime($today)>strtotime($tempdate)){
+							 		if(strtotime($today." 00:00:00")>strtotime($tempdate->productdate." 00:00:00")){
 							 			echo "<optgroup label=\"".$tempdate->productdate."(剩余票数:".$tempdate->inventory.")\"></optgroup>";
 							 		}else{
 							 			echo "<option value=\"".$tempdate->productdate."\">".$tempdate->productdate."(剩余票数:".$tempdate->inventory.")"."</option>";

@@ -2,6 +2,7 @@
 class Product {
 	public $id, $lineid, $description, $price, $childprice, $photourl, $promotephotourl, $title, $createtime;
 	public $productdates = array ();
+	public $productdatesvaluesmap = array();
 	function __get($property_name) {
 		if (isset ( $this->$property_name )) {
 			return $this->$property_name;
