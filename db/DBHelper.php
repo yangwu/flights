@@ -69,6 +69,41 @@ class DBHelper {
 		return $result;
 	}
 	
+	public function updateAccountInfo($account,$user,$oldlines,$newlines){
+		$updateusersql = 'UPDATE user set realname="'.mysql_real_escape_string ( $user->realname ).'", address = "'.mysql_real_escape_string ( $user->address ).'",qq="'.$user->qq.'",tel="'.$user->tel.'",businesslicenseurl="'.$user->businesslicenseurl.'" where id='.$user->id;
+		mysql_query("BEGIN");
+		
+		$userresult = mysql_query ( $updateusersql );
+		if(!$userresult){
+			mysql_query("ROLLBACK");
+			return false;
+		}
+
+		$count = count($oldlines);
+		for($i=0;$i<$count;$i++){
+			$updateline = 'UPDATE line set accountid = 0 where id = ' . $oldlines[$i];
+			$updateresult = mysql_query($updateline);
+			if(!$updateresult){
+				mysql_query("ROLLBACK");
+				return false;
+			}
+		}
+		
+		$newcount = count($newlines);
+		for($k=0;$k<$newcount;$k++){
+			$newupdateline = 'UPDATE line set accountid = ' . $account->id . ' where id = ' . $newlines[$k];
+			$newupdateresult = mysql_query($newupdateline);
+			if(!$newupdateresult){
+				mysql_query("ROLLBACK");
+				return false;
+			}
+		}
+		
+		mysql_query("COMMIT");
+		mysql_query("END");
+		return true;
+	}
+	
 	public function checkAccount($account) {
 		$querySql = 'select id,name,email from account where email = "' . mysql_real_escape_string ( $account->email ) . '" or name = "' . mysql_real_escape_string ( $account->name ) . '"';
 		echo "<br/>check sql:" . $querySql;
@@ -97,8 +132,14 @@ class DBHelper {
 	}
 	
 	public function getUsersInfo($type){
-		$usersinfosql = "SELECT * from (SELECT * FROM `account` WHERE type = '".$type."'".
+		$usersinfosql = "SELECT a.id,a.name,a.email,a.status,user.realname,user.address,user.tel,user.qq,user.businesslicenseurl from (SELECT * FROM `account` WHERE type = '".$type."'".
 						" ) a left outer join user on a.id = user.accountid	order by a.createtime";
+		return mysql_query($usersinfosql);
+	}
+	
+	public function getUserById($accountid){
+		$usersinfosql = "SELECT a.id accountid,a.name,a.email,a.status,user.id userid,user.realname,user.address,user.tel,user.qq,user.businesslicenseurl from (SELECT * FROM `account` WHERE id = ".$accountid.
+				" ) a left outer join user on a.id = user.accountid";
 		return mysql_query($usersinfosql);
 	}
 	
@@ -112,12 +153,23 @@ class DBHelper {
 		$linesql = 'select * from line where id='.$lineid;
 		return mysql_query($linesql);
 	}
+	
+	public function getUserLines($accountid){
+		$linessql = 'select * from line where accountid = '.$accountid;
+		return mysql_query($linessql);
+	}
+	
 	public function updateLineAccount($line) {
 		$updateline = 'UPDATE line set accountid = ' . $line->accountid . ' where id = ' . $line->id;
 		echo "<br/>updateline:" . $updateline;
 		$result = mysql_query ( $updateline );
 		echo "update result:" . $result;
 		return $result;
+	}
+	
+	public function updateLineName($line){
+		$updatesql = 'update line set name="'.$line->name.'" where id = '.$line->id;
+		return mysql_query($updatesql);
 	}
 	
 	public function getAllLines(){

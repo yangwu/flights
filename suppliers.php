@@ -76,14 +76,48 @@ $suppliers = $baccount->getSuppliersInfo();
         	}
         ?>
         	<h3>批发商列表 &nbsp;&nbsp;&nbsp;&nbsp;<a href="addsupplier.php">添加批发商</a></h3>
-        	<ul class="nav nav-tabs nav-stacked">
-            <?php 
-            if(count($suppliers)>0)
-	            foreach ($suppliers as $supplier){
-	            	echo "<li>".$supplier->user->realname."</li>";
-	            }
-            ?> 
-            </ul>
+             <div>
+      <?php $ordercount = count($suppliers);
+        if($ordercount>0){
+        	echo "<div class=\"widget-body\"><table class=\"table table-condensed table-striped table-bordered table-hover no-margin\"><thead><tr>";
+        	echo "<th style=\"width:5%\">用户名</th><th style=\"width:5%\" class=\"hidden-phone\">姓名</th>";
+        	echo "<th style=\"width:30%\" class=\"hidden-phone\">地点</th><th style=\"width:20%\" class=\"hidden-phone\">联系方式</th><th style=\"width:20%\" class=\"hidden-phone\">营业执照</th><th style=\"width:10%\" class=\"hidden-phone\">专线</th><th style=\"width:10%\" class=\"hidden-phone\">操作</th></tr></thead>";
+        	echo "<tbody>";
+        	
+        	$k = 0;
+        	foreach ($suppliers as $supplier){
+        		$lines = $supplier->lines;
+        		$linesstr = "";
+        		foreach ($lines as $curline){
+        			$linesstr .= $curline->name.',';
+        		}
+        		$k++;
+        		if ($k % 2 == 0) {
+        			echo "<tr>";
+        		} else {
+        			echo "<tr class=\"gradeA success\">";
+        		}
+        		echo "<td style=\"width:10%;vertical-align:middle;\">".$supplier->name."</td>";
+        		echo "<td style=\"width:10%;vertical-align:middle;\">".$supplier->user->realname."</td>";
+        		echo "<td style=\"width:30%;vertical-align:middle;\">".$supplier->user->address."</td>";
+        		echo "<td style=\"width:20%;vertical-align:middle;\">电话:".$supplier->user->tel." QQ:".$supplier->user->qq."</td>";
+        		echo "<td style=\"width:20%;vertical-align:middle;\">".$supplier->user->businesslicenseurl."<img width=100 height=100 src=\"".$supplier->user->businesslicenseurl."\"/></td>";
+        		echo "<td style=\"width:30%;vertical-align:middle;\">".$linesstr."</td>";
+        		echo "<td style=\"width:10%;vertical-align:middle;\"><a href=\"./updatesupplier.php?sid=".$supplier->id ."\">修改</a></td>";
+        		echo "</tr>";
+        	}
+
+        	echo "<tr><td style=\"width:0%;vertical-align:middle;\"></td></tr>";
+        	echo "<tr><td style=\"width:0%;vertical-align:middle;\"></td></tr>";
+        	echo "<tr><td style=\"width:0%;vertical-align:middle;\"></td></tr>";
+        	echo "<tr><td style=\"width:0%;vertical-align:middle;\"></td></tr>";
+        	echo "<tr><td style=\"width:0%;vertical-align:middle;\"></td></tr>";
+        	echo "<tr><td style=\"width:0%;vertical-align:middle;\"></td></tr>";
+        	echo "</tbody></div>";
+        }
+      ?>
+   
+   </div>
         </div>
 <div class="col-md-1">
         </div>

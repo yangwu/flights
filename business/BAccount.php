@@ -2,6 +2,7 @@
 include_once dirname ( '__FILE__' ) . '/./db/DBHelper.php';
 include_once dirname ( '__FILE__' ) . '/./model/Account.php';
 include_once dirname ( '__FILE__' ) . '/./model/User.php';
+include_once dirname ( '__FILE__' ) . '/./model/Line.php';
 class BAccount {
 	private $dbhelper;
 	public function __construct() {
@@ -16,6 +17,15 @@ class BAccount {
 	
 	public function addAccountInfo($account,$user,$lines){
 		return $this->dbhelper->addAccountInfo($account, $user, $lines);
+	}
+	
+	public function updateAccountInfo($account,$lines){
+		$oldlinesarray = $account->lines;
+		$oldlines = array();
+		foreach ($oldlinesarray as $oldline){
+			$oldlines[] = $oldline->id;
+		}
+		return $this->dbhelper->updateAccountInfo($account, $account->user, $oldlines, $lines);
 	}
 	
 	public function isAccountExisted($account) {
@@ -53,6 +63,7 @@ class BAccount {
 				$curUser = new User();
 				
 				$curAccount->name = $supplier['name'];
+				$curAccount->id = $supplier['id'];
 				$curUser->address = $supplier['address'];
 				$curUser->businesslicenseurl = $supplier['businesslicenseurl'];
 				$curUser->qq = $supplier['qq'];
@@ -60,12 +71,55 @@ class BAccount {
 				$curUser->tel = $supplier['tel'];
 				
 				$curAccount->user = $curUser;
+				$curAccount->lines = $this->getUserLines($supplier['id']);
 				
 				$suppliers[] = $curAccount;
 			}
 		}
 		
 		return $suppliers;
+	}
+	
+	public function getSupplier($sid){
+		$supplierResult = $this->dbhelper->getUserById($sid);
+		if($supplierResult){
+			if($supplier = mysql_fetch_array($supplierResult)){
+				$curAccount = new Account();
+				$curUser = new User();
+				
+				$curAccount->name = $supplier['name'];
+				$curAccount->id = $supplier['accountid'];
+				$curUser->address = $supplier['address'];
+				$curUser->businesslicenseurl = $supplier['businesslicenseurl'];
+				$curUser->qq = $supplier['qq'];
+				$curUser->realname = $supplier['realname'];
+				$curUser->tel = $supplier['tel'];
+				$curUser->id = $supplier['userid'];
+				
+				$curAccount->user = $curUser;
+				$curAccount->lines = $this->getUserLines($sid);
+				
+				return $curAccount;
+			}
+		}
+		return null;
+	}
+	
+	public function getUserLines($sid){
+		$lines = array();
+		$linesresult = $this->dbhelper->getUserLines($sid);
+		if($linesresult){
+			while($line = mysql_fetch_array($linesresult)){
+				$curLine = new Line();
+				$curLine->id = $line['id'];
+				$curLine->accountid = $line['accountid'];
+				$curLine->createtime = $line['createtime'];
+				$curLine->name = $line['name'];
+				
+				$lines[] = $curLine;
+			}
+		}
+		return $lines;
 	}
 	
 	public function getPendingAccountInfo(){

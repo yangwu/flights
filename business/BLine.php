@@ -21,6 +21,10 @@ class BLine {
 		return false;
 	}
 	
+	public function updatelinename($line){
+		return $this->dbhelper->updateLineName($line);	
+	}
+	
 	public function getLineById($lineid){
 		$result = $this->dbhelper->getLineById($lineid);
 		if($result){
