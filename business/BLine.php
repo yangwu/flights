@@ -51,6 +51,18 @@ class BLine {
 		return $lines;
 	}
 	
+	public function getAccountLines($accountid,$accounttype){
+		$result = $this->dbhelper->getAccountLines($accountid, $accounttype);
+		$lines = array();
+		while($temp = mysql_fetch_array($result)){
+			$line = new Line();
+			$line->name = $temp['name'];
+			$line->id = $temp['id'];
+			$lines[] = $line;
+		}
+		return $lines;
+	}
+	
 	public function getUnAllocatedLines(){
 		$result = $this->dbhelper->getUnAllocatedLines();
 		$lines = array();

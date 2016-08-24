@@ -111,7 +111,6 @@ class DBHelper {
 	
 	public function checkAccount($account) {
 		$querySql = 'select id,name,email from account where email = "' . mysql_real_escape_string ( $account->email ) . '" or name = "' . mysql_real_escape_string ( $account->name ) . '"';
-		echo "<br/>check sql:" . $querySql;
 		$result = mysql_query ( $querySql );
 		return $result;
 	}
@@ -166,9 +165,7 @@ class DBHelper {
 	
 	public function updateLineAccount($line) {
 		$updateline = 'UPDATE line set accountid = ' . $line->accountid . ' where id = ' . $line->id;
-		echo "<br/>updateline:" . $updateline;
 		$result = mysql_query ( $updateline );
-		echo "update result:" . $result;
 		return $result;
 	}
 	
@@ -180,6 +177,16 @@ class DBHelper {
 	public function getAllLines(){
 		$sql = 'SELECT * FROM line order by createtime,id';
 		return mysql_query($sql);
+	}
+	
+	public function getAccountLines($accountid,$accounttype){
+		$accountlinessql = 'select * from line';
+		if(strcmp($accounttype,TYPE_HEADQUARTER) == 0){
+			$accountlinessql .= "  order by createtime,id";
+		}else if(strcmp($accounttype,TYPE_SUPPLIER) == 0){
+			$accountlinessql .= " where accountid = ".$accountid. " order by createtime,id";
+		}
+		return mysql_query($accountlinessql);
 	}
 
 	public function getUnAllocatedLines(){
@@ -196,7 +203,6 @@ class DBHelper {
 	public function updateProduct($product){
 		$updateproduct = 'update product set lineid = '.$product->lineid.', title = "'.mysql_real_escape_string ( $product->title ).'", description = "'.mysql_real_escape_string ( $product->description ).'",price ='.
 							$product->price.',childprice = '.$product->childprice.',photourl="'.mysql_real_escape_string($product->photourl).'",promotephotourl="'.mysql_real_escape_string($product->promotephotourl).'",createtime="'.date('Ymd H:i:s').'" where id='.$product->id;
-		echo "<br/>updatesql:".$updateproduct;
 		return mysql_query($updateproduct);
 	}
 	
@@ -217,7 +223,6 @@ class DBHelper {
 	
 	public function addProductDate($productdate) {
 		$insertproductdate = 'INSERT INTO productdate (productid,productdate,inventory,total) ' . 'VALUES(' . $productdate->productid . ',"' . $productdate->productdate . '",' . $productdate->inventory . ',' . $productdate->total . ')';
-		echo "<br/>insertproductdate:".$insertproductdate;
 		return mysql_query ( $insertproductdate );
 	}
 	

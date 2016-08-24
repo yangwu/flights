@@ -6,6 +6,7 @@ header ( "Content-Type: text/html;charset=utf-8" );
 session_start ();
 $username =$_SESSION ['username'];
 $type = $_SESSION['type'];
+$accountid = $_SESSION['id'];
 session_commit();
 
 if ($username == null) { // 未登录
