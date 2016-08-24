@@ -8,6 +8,13 @@ header ( "Content-Type: text/html;charset=utf-8" );
 
 $type = $_GET['type'];
 $msg = null;
+
+$baccount = new BAccount();
+if($baccount->isAdminExist()){
+	header ( "Refresh:5;url=login.php" );
+	print('管理员已经存在，请直接登录<br>五秒后自动跳转。');
+	exit();
+}
 if(strcmp ( $type, "register" ) == 0){
 	$username  = $_POST['username'];
 	$email = $_POST ["email"];
@@ -18,7 +25,7 @@ if(strcmp ( $type, "register" ) == 0){
 	$officelicense = $_POST ["officelicense"];
 	$qq = $_POST ["qq"];
 
-	$account = new Account();
+	$account = new Account();	
 	$account->name = $username;
 	$account->email = $email;
 	$account->psd = md5($password);
@@ -27,7 +34,7 @@ if(strcmp ( $type, "register" ) == 0){
 	$account->status = STATUS_APPROVED;
 	$account->type = TYPE_HEADQUARTER;
 
-	$baccount = new BAccount();
+	
 	$newaccountid = $baccount->addAccount($account);
 
 	if($newaccountid>0){

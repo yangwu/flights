@@ -25,6 +25,11 @@ class DBHelper {
 		return mysql_query ( $querySql );
 	}
 	
+	public function isAdminExist(){
+		$isadminexist = 'select id from account where type='.TYPE_HEADQUARTER;
+		return mysql_query($isadminexist);
+	}
+	
 	public function addAccount($account) {
 		$insertsql = 'INSERT INTO account (name,psd,email,createtime,status,type) ' . 'VALUES("' . mysql_real_escape_string ( $account->name ) . '","' . mysql_real_escape_string ( $account->psd ) . '","' . mysql_real_escape_string ( $account->email ) . '","' . date('Ymd H:i:s') . '",' . $account->status . ',' . $account->type . ')';
 		$result = mysql_query ( $insertsql );

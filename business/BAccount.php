@@ -15,6 +15,15 @@ class BAccount {
 		return $this->dbhelper->addAccount ( $account );
 	}
 	
+	public function isAdminExist(){
+		$result = $this->dbhelper->isAdminExist();
+		if ($result){
+			if($temp = mysql_fetch_array($result))
+				return true;
+		}
+		return false;
+	}
+	
 	public function addAccountInfo($account,$user,$lines){
 		return $this->dbhelper->addAccountInfo($account, $user, $lines);
 	}
