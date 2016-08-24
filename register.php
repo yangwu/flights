@@ -29,7 +29,6 @@ if(strcmp ( $command, "register" ) == 0){
 	
 	$baccount = new BAccount();
 	$newaccountid = $baccount->addAccount($account);
-	echo "<br/>add new account:".$newaccountid;
 
 	if($newaccountid>0){
 		$user = new User();

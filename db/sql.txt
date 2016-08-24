@@ -78,12 +78,14 @@ CREATE TABLE `purchaseinfo`(
   PRIMARY KEY(`id`)
 ) DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `resetpassword`;
 CREATE TABLE `resetpassword`(
 	`userid` int(11) NOT NULL,
 	`token`  varchar(50) NOT NULL,
 	PRIMARY KEY (`userid`)
 )  DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `actionlog`;
 CREATE TABLE `actionlog`(
 	`id` int(11) NOT NULL AUTO_INCREMENT,
 	`accountid` int(11) NOT NULL,

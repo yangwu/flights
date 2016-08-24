@@ -14,6 +14,7 @@ header ( "Content-Type: text/html;charset=utf-8" );
 session_start ();
 $currentusername =$_SESSION ['username'];
 $type = $_SESSION['type'];
+$accountid = $_SESSION['id'];
 session_commit();
 
 if ($currentusername == null) { // 未登录
@@ -22,7 +23,7 @@ if ($currentusername == null) { // 未登录
 }
 
 $bline = new BLine();
-$lines = $bline->getAllLines();
+$lines = $bline->getAccountLines($accountid, $type);
 
 $dates = array();
 $firstDate = date('Y-m-d');
@@ -51,7 +52,6 @@ if(strcmp ( $command, "addproduct" ) == 0){
 	foreach ( $_POST as $key => $value ) {
 		if (preg_match ( "/^dateticket/", $key )) {
 			$choosedate = explode ( "_", $key )[1];
-			echo "<br/>choosed:".$choosedate.",value:".$value;
 			$mapdates[$choosedate] = $value;
 		}
 	}

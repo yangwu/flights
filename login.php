@@ -25,12 +25,9 @@ if(strcmp($command,"login") == 0 ){
 	$baccount = new BAccount();
 	$account = $baccount->getAccount($username, md5($psd));
 	if($account != null){
-		echo "<br/>login success";
 		if(strcmp($account->type,TYPE_FRONTSTORE) == 0 && strcmp($account->status,STATUS_PENDING) == 0 ){
-			echo "<br/> your account is still pending";
 			$errorMsg = "您的账户还在审核中，请等待管理员审核完毕后再继续使用。";
 		}else {
-			echo "<br/> go to index";
 			session_start ();
 			$_SESSION ['username'] = $account->name;
 			$_SESSION['type'] = $account->type;

@@ -78,7 +78,11 @@ if(strcmp ( $type, "register" ) == 0){
 				<div class="signup-page-content">
 					<form class="form form-horizontal" id="registerform" method="post"
 						action="init.php?<?php echo "type=register"?>">
-							<ul align="center"  style="color:#F00">***提交该页面，则会清空网站所有数据，恢复到最初始的状态，请谨慎操作***</ul>
+							<?php if(isset($msg)){
+								echo "<ul align=\"center\" style=\"color:#F00\">".$msg."</ul>";
+							}else {
+								//echo "<ul align=\"center\"  style=\"color:#F00\">***提交该页面，则会清空网站所有数据，恢复到最初始的状态，请谨慎操作***</ul>";
+							}?>
 						<div class="control-group">
 							<label class="control-label" for="username"><font color="#F00">* </font>管理员用户名</label>
 							<div class="controls input-append">
@@ -189,9 +193,9 @@ if(strcmp ( $type, "register" ) == 0){
 				return;
 			}
 
-			if(window.confirm('你确定要初始化网站，清空所有数据吗？')){
+			//if(window.confirm('你确定要初始化网站，清空所有数据吗？')){
             	$('#registerform').submit();
-             }
+            // }
 			   
 		
 		});

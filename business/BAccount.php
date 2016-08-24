@@ -141,7 +141,7 @@ class BAccount {
 					$curAccount = new Account();
 					$curUser = new User();
 					
-					$curAccount->id = $pendingaccount['accountid'];
+					$curAccount->id = $pendingaccount['id'];
 					$curAccount->name = $pendingaccount['name'];
 					$curUser->address = $pendingaccount['address'];
 					$curUser->businesslicenseurl = $pendingaccount['businesslicenseurl'];

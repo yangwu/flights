@@ -13,11 +13,9 @@ class BLine {
 		return $this->dbhelper->addLine ( $line );
 	}
 	public function updatelineAccountid($line) {
-		echo "<br/> accountid of line:" . $line->accountid;
 		if (isset ( $line->accountid )) {
 			return $this->dbhelper->updateLineAccount ( $line );
 		}
-		echo "<br/> line accountid not set";
 		return false;
 	}
 	

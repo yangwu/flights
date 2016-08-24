@@ -15,7 +15,6 @@ class BProduct {
 		$count = count($productdates);
 		for($i=0;$i<$count;$i++){
 			$tempdate = $productdates[$i];
-			echo "<br/>tempdate:".$tempdate->productdate;
 			$tempdate->productid = $productid;
 			$this->addProductDate($productdates[$i]);
 		}
@@ -34,7 +33,6 @@ class BProduct {
 		$count = count($productdates);
 		for($i=0;$i<$count;$i++){
 			$tempdate = $productdates[$i];
-			echo "<br/>tempdate:".$tempdate->productdate;
 			$this->addProductDate($productdates[$i]);
 		}
 		return $updateresult;

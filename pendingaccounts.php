@@ -123,6 +123,8 @@ $pendingAccounts = $baccount->getPendingAccountInfo();
         		$k++;
         	}
         	echo "</tbody></table></div>";
+        }else{
+        	echo "<h3>暂时没有待审批的门店用户信息</h3>";
         }
       ?>
    </div>
