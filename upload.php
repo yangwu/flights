@@ -16,7 +16,7 @@ if (isset($_FILES)) {
 		$tmp_name = $curFile['tmp_name'];
 		$name     = basename($curFile['name']);
 		$error    = $curFile['error'];
-		$extension = pathinfo($name, PATHINFO_EXTENSION);
+		$extension = strtolower(pathinfo($name, PATHINFO_EXTENSION));
 		
 		$newname = uniqid().".".$extension;
 		$dest = "../images/".$newname;
